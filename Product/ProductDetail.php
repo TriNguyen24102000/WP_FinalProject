@@ -353,9 +353,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <div class="col-xs-6 footer-grids">
                             <h3>Categories</h3>
                             <ul>
-                                <?php
-                                    
-                                ?>
                                 <li>
                                     <a href="product.html">Flower</a>
                                 </li>
