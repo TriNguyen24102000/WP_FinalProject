@@ -1,9 +1,9 @@
 <?php
-
     include_once('Service/ProductService.php');
     $productRepo = new ProductRepository();
     $productService = new ProductService($productRepo);
 
+    // $_GET ... 
     $data = $productService->getProductById("90");
     $product = count($data) > 0 ? $data[0]: null;
 ?>
@@ -20,7 +20,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 </html>
 
 <head>
-    <title>Beokun</title>
+    <title><?php echo $product['name']?></title>
     <!--/tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -48,8 +48,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <body>
 
     <body data-new-gr-c-s-check-loaded="14.990.0" data-gr-ext-installed="">
-        <!-- top-header -->
-        <!-- //top-header -->
         <!-- header-bot-->
         <div class="header-bot">
             <div class="header-bot_inner_wthreeinfo_header_mid">
@@ -57,9 +55,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <div class="col-md-4 logo_agile">
                     <h1>
                         <a href="index.html">
-                            <span>G</span>rocery
-                            <span>S</span>hoppy
-                            <img src="../images//logo2.png" alt=" ">
+                            <span>O</span>izoioi <span>M</span>art
+                            <img src="../images/logo2.png" alt=" " style="width: 70px; height: 70px;" />
                         </a>
                     </h1>
                 </div>
@@ -68,7 +65,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <!-- header lists -->
                     <ul>
 
-                        <span class="fa fa-phone" aria-hidden="true"></span> 001 234 5678
+                        <span class="fa fa-phone" aria-hidden="true"></span> 028 3915 5812
 
                         <li>
                             <a href="#" data-toggle="modal" data-target="#myModal1">
@@ -109,94 +106,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <div class="clearfix"></div>
             </div>
         </div>
-        <!-- signin Model -->
-        <!-- Modal1 -->
-        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">×</button>
-                    </div>
-                    <div class="modal-body modal-body-sub_agile">
-                        <div class="main-mailposi">
-                            <span class="fa fa-envelope-o" aria-hidden="true"></span>
-                        </div>
-                        <div class="modal_body_left modal_body_left1">
-                            <h3 class="agileinfo_sign">Sign In </h3>
-                            <p>
-                                Sign In now, Let's start your Grocery Shopping. Don't have an account?
-                                <a href="#" data-toggle="modal" data-target="#myModal2">
-                                    Sign Up Now</a>
-                            </p>
-                            <form action="#" method="post">
-                                <div class="styled-input agile-styled-input-top">
-                                    <input type="text" placeholder="User Name" name="Name" required="">
-                                </div>
-                                <div class="styled-input">
-                                    <input type="password" placeholder="Password" name="password" required="">
-                                </div>
-                                <input type="submit" value="Sign In">
-                            </form>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <!-- //Modal content-->
-            </div>
-        </div>
-        <!-- //Modal1 -->
-        <!-- //signin Model -->
-        <!-- signup Model -->
-        <!-- Modal2 -->
-        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">×</button>
-                    </div>
-                    <div class="modal-body modal-body-sub_agile">
-                        <div class="main-mailposi">
-                            <span class="fa fa-envelope-o" aria-hidden="true"></span>
-                        </div>
-                        <div class="modal_body_left modal_body_left1">
-                            <h3 class="agileinfo_sign">Sign Up</h3>
-                            <p>
-                                Come join the Grocery Shoppy! Let's set up your Account.
-                            </p>
-                            <form action="#" method="post">
-                                <div class="styled-input agile-styled-input-top">
-                                    <input type="text" placeholder="Name" name="Name" required="">
-                                </div>
-                                <div class="styled-input">
-                                    <input type="email" placeholder="E-mail" name="Email" required="">
-                                </div>
-                                <div class="styled-input">
-                                    <input type="password" placeholder="Password" name="password" id="password1"
-                                        required="">
-                                </div>
-                                <div class="styled-input">
-                                    <input type="password" placeholder="Confirm Password" name="Confirm Password"
-                                        id="password2" required="">
-                                </div>
-                                <input type="submit" value="Sign Up">
-                            </form>
-                            <p>
-                                <a href="#">By clicking register, I agree to your terms</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <!-- //Modal content-->
-            </div>
-        </div>
-        <!-- //Modal2 -->
-        <!-- //signup Model -->
-        <!-- //header-bot -->
-        <!-- navigation -->
-        <!-- //navigation -->
+
         <!-- page -->
         <div class="services-breadcrumb">
             <div class="agile_inner_breadcrumb">
@@ -214,6 +124,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </div>
         </div>
         <!-- //page -->
+
         <!-- Single Page -->
         <div class="banner-bootom-w3-agileits">
             <div class="container">
@@ -252,7 +163,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <div class="col-md-7 single-right-left simpleCart_shelfItem">
                     <h3><?php echo $product['name']?></h3>
                     <p>
-                        <span class="item_price">$<?php echo $product['price']?></span>
+                        <span class="item_price">
+                            $<?php echo $product['price']?>
+                        </span>
                         <label>Free delivery</label>
                     </p>
                     <div class="single-infoagile">
@@ -269,7 +182,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <?php
                                 }
                             ?>
-                            <li>Manufactured by: <?php echo  asda?></li>
+
+                            <li>View:
+                                <?php echo ++$product['view']?>
+                            </li>
+
+                            <li>
+                                Quantity in stock:
+                                <?php echo $product['quantity']?>
+                            </li>
+
+                            <li>
+                            </li>
+
+                            <li>Manufactured by:
+                                <?php echo $productService->getManuNameByProductId($product['productID']) ?>
+                            </li>
                         </ul>
                     </div>
                     <div class="product-single-w3l">
@@ -306,6 +234,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </div>
         </div>
         <!-- //Single Page -->
+
         <!-- special offers -->
         <div class="featured-section" id="projects">
             <div class="container">
@@ -341,7 +270,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                                 </a>
                                             </h4>
                                             <div class="w3l-pricehkj">
-                                                <h6><?php echo $relatedPro["price"]; ?>d</h6>
+                                                <h6>$<?php echo $relatedPro["price"]; ?></h6>
                                             </div>
                                             <div
                                                 class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
@@ -379,8 +308,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </div>
         <!-- //special offers -->
 
-        <!-- newsletter -->
-        <!-- //newsletter -->
         <!-- footer -->
         <footer>
             <div class="container">
@@ -426,6 +353,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <div class="col-xs-6 footer-grids">
                             <h3>Categories</h3>
                             <ul>
+                                <?php
+                                    
+                                ?>
                                 <li>
                                     <a href="product.html">Flower</a>
                                 </li>
@@ -496,6 +426,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </div>
         </footer>
         <!-- //footer -->
+
         <!-- copyright -->
         <div class="copy-right">
             <div class="container">
@@ -503,8 +434,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </div>
         </div>
         <!-- //copyright -->
-
-
 
         <!-- smoothscroll -->
         <script src="../js/SmoothScroll.min.js"></script>
