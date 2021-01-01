@@ -1,5 +1,4 @@
 <?php
-
     function Connect()
     {
         $host = 'localhost';
@@ -20,7 +19,4 @@
             echo $ex->getMessage();
         }
     }
-
-    
-
 ?>

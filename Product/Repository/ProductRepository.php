@@ -1,13 +1,13 @@
 <?php 
+    //require('Helper/Helper.php');
     
-    include('Helper/Helper.php');
-
     class ProductRepository {
 
-        private $conn;
+        public $conn;
+        
         // constructor
-        public function __construct() {
-            $this->conn = Connect();
+        public function __construct($conn) {
+            $this->conn = $conn;
         }
         
         // get all products
@@ -39,7 +39,7 @@
                 $data[] = $row; 
             }
 
-            return $data;
+            return $data[0];
         }
 
         // get all products by category id
@@ -63,7 +63,7 @@
         public function getRelatedProducts($id) {
             $data = array();
 
-            $sql = "SELECT * FROM product p1 WHERE p1.productID != $id AND p1.cateID = (SELECT p.cateID FROM product p WHERE p.productID = $id) ORDER BY RAND() LIMIT 3";
+            $sql = "SELECT * FROM product p1 WHERE p1.productID != $id AND p1.cateID = (SELECT p.cateID FROM product p WHERE p.productID = $id) ORDER BY RAND() LIMIT 5";
             
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
@@ -111,28 +111,28 @@
         }
 
         // insert product
-        public function insertProduct($id, $cateID, $manuID, $name, $price,$quantity,$description,$image,$createAt, $view){
+        public function insertProduct($cateID, $manuID, $name, $price,$quantity,$description,$image,$createAt, $view, $productID = 'NULL'){
             $sql = "INSERT INTO product
-                    VALUES('$id','$cateID','$manuID','$price','$quantity','$description','$image','$createAt','$view','NULL')";
+                    VALUES('$productID','$cateID','$manuID','$price','$quantity','$description','$image','$createAt','$view','NULL')";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
         }
         
         // update product
-        public function updateProduct($id, $cateID, $manuID, $name, $price,$quantity,$description,$image,$createAt, $view, $updateAt) {
+        public function updateProduct($product) {
             $sql = "UPDATE product
-                    SET `productID` ='$id',
-                        `name` ='$name',
-                        `manuID` ='$manuID',
-                        `quantity` ='$quantity',
-                        `view` ='$view',
-                        `createAt` ='$createAt',
-                        `updateAt` ='$updateAt', 
-                        `description` ='$description',
-                        `cateID` ='$cateID',
-                        `price` ='$price',
-                        `image` ='$image'
-                    WHERE productID = '$id'";
+                    SET 
+                        `name` = `{$product['name']}`,
+                        `manuID` = `{$product['manuID']}`,
+                        `quantity` = {$product['quantity']},
+                        `view` = {$product['view']},
+                        `createAt` = {$product['createAt']},
+                        `updateAt` = {$product['updateAt']}, 
+                        `description` = {$product['description']},
+                        `cateID` = {$product['cateID']},
+                        `price` = {$product['price']},
+                        `image` = {$product['image']}
+                    WHERE productID = {$product['productID']}";
             
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();

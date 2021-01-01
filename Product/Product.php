@@ -1,11 +1,24 @@
 <?php
     include_once('Service/ProductService.php');
-    $productRepo = new ProductRepository();
-    $productService = new ProductService($productRepo);
+    include('../Category/Service/CategoryService.php');
 
-    // get categori ID
+    include('Helper/Helper.php');
+    $db = Connect();
+
+    // product
+    $productRepo = new ProductRepository($db);
+    $productService = new ProductService($productRepo);
+    // get product by category ID
     $products = $productService->getProductsByCateId($cateId = '2');
 
+    // category
+    $categoryRepo = new CategoryRepository($db);
+    $categoryService = new CategoryService($categoryRepo);
+    // get all categories
+    $categories = $categoryService->getAllCategories();
+
+    // get selected category
+    $selectedCate = $categoryService->getCategoryById('1');
 ?>
 
 
@@ -13,12 +26,10 @@
 <html lang="zxx">
 
 <head>
-    <title>MartFast</title>
+    <title><?php echo $selectedCate['name']?></title>
     <!--/tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="keywords" content="Grocery Shoppy Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
     <script>
     addEventListener(
         'load',
@@ -54,7 +65,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <h1>
                     <a href="index.html">
                         <span>O</span>izoioi <span>M</span>art
-                        <img src="../images/logo2.png" alt=" " style="width: 70px; height: 70px;" />
                     </a>
                 </h1>
             </div>
@@ -118,9 +128,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <form action="#" method="post">
                                 <select id="agileinfo-nav_search" name="agileinfo_search" required="">
                                     <option value="">All Categories</option>
-                                    <option value="Kitchen">Flower</option>
-                                    <option value="Household">Food</option>
-                                    <option value="Snacks &amp; Beverages">Gift</option>
+                                    <?php
+                                        foreach($categories as $category) {  
+                                    ?>
+                                    <option value="<?php echo $category["id"]?>">
+                                        <?php echo $category["name"]?>
+                                    </option>
+                                    <?php 
+                                        }
+                                    ?>
                                 </select>
                             </form>
                         </div>
@@ -136,7 +152,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div class="container">
             <!-- tittle heading -->
             <h3 class="tittle-w3l">
-                Flower product
+                Flower products
                 <span class="heading-style">
                     <i></i>
                     <i></i>
@@ -178,12 +194,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <div class="col-xs-4 product-men" style="width: 260px; height: 420px">
                             <div class="men-pro-item simpleCart_shelfItem">
                                 <div class="men-thumb-item">
-                                    <img src="../images/<?php echo $products[$i]['image']?>" alt=""
-                                        style="width: 230px; height: 200px" />
+                                    <a href="ProductDetail.php?id=<?php echo $products[$i]['productID']?>">
+                                        <img src="../images/<?php echo $products[$i]['image']?>" alt=""
+                                            style="width: 230px; height: 200px" />
+                                    </a>
                                 </div>
                                 <div class="item-info-product">
                                     <h4 style="height: 33px;">
-                                        <a href="single.html"><?php echo $products[$i]['name']?></a>
+                                        <a href="ProductDetail.php?id=<?php echo $products[$i]['productID']?>"><?php echo $products[$i]['name']?>
+                                        </a>
                                     </h4>
                                     <div class="info-product-price">
                                         <span class="item_price">$<?php echo $products[$i]['price']?></span>
@@ -255,14 +274,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <li>
                         <div class="w3l-specilamk">
                             <div class="speioffer-agile">
-                                <a href="single.html">
+                                <a href="ProductDetail.php?id=<?php echo $products[$i]['productID']?>">
                                     <img src="../images/<?php echo $products[$i]['image']?>" alt=""
                                         style="width: 230px; height: 200px" />
                                 </a>
                             </div>
                             <div class="product-name-w3l">
-                                <h4>
-                                    <a href="single.html"><?php echo $products[$i]['name']?></a>
+                                <h4 style="height: 33px;">
+                                    <a href="ProductDetail.php?id=<?php echo $products[$i]['productID']?>">
+                                        <?php echo $products[$i]['name']?>
+                                    </a>
                                 </h4>
                                 <div class="w3l-pricehkj">
                                     <h6>$<?php echo $products[$i]['price']?></h6>

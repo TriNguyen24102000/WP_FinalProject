@@ -1,10 +1,10 @@
 <?php 
-    include_once('Repository/CategoryRepository.php');
-
+    include(__DIR__.'/../Repository/CategoryRepository.php');
+    //echo $doc.'Category/Repository/CategoryRepository.php';
     class CategoryService {
         private $categoryRepo;
 
-        public function __construct($categoryRepo) {
+        public function __construct(CategoryRepository $categoryRepo) {
             $this->categoryRepo = $categoryRepo;
         }
 
@@ -20,8 +20,8 @@
             return $this->categoryRepo->insertCategory($name, $createAt, $updateAt);
         }
 
-        public function updateCategory($cateID, $name, $createAt, $updateAt = '') {
-            return $this->categoryRepo->updateCategory($cateID, $name, $createAt, $updateAt);
+        public function updateCategory($category) {
+            return $this->categoryRepo->updateCategory($category);
         }
 
         public function deleteCategory($cateID) {

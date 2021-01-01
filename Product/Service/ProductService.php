@@ -1,6 +1,6 @@
 <?php
 
-    include_once('Repository/ProductRepository.php');
+    include(__DIR__.'/../Repository/ProductRepository.php');
 
     class ProductService {
         private $productRepo;
@@ -33,8 +33,8 @@
             return $this->productRepo->getCateNameByProductId($id);
         }
 
-        public function updateProduct($id, $cateID, $manuID, $name, $price,$quantity,$description,$image,$createAt, $view, $updateAt){
-            return $this->productRepo->updateProduct($id, $cateID, $manuID, $name, $price,$quantity,$description,$image,$createAt, $view, $updateAt);
+        public function updateProduct($product){
+            return $this->productRepo->updateProduct($product);
         }
 
         public function insertProduct($id, $cateID, $manuID, $name, $price,$quantity,$description,$image,$createAt, $view){

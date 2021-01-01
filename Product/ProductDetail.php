@@ -1,19 +1,17 @@
 <?php
     include_once('Service/ProductService.php');
-    $productRepo = new ProductRepository();
+    include('Helper/Helper.php');
+    $db = Connect();
+
+    $productRepo = new ProductRepository($db);
     $productService = new ProductService($productRepo);
 
-    // $_GET ... 
-    $data = $productService->getProductById("90");
-    $product = count($data) > 0 ? $data[0]: null;
+    $id =  $_GET["id"]; 
+    $product = $productService->getProductById($id);
+    //$product['view']++;
+   // $productService->updateProduct($product);
 ?>
 
-<!--
-Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -24,17 +22,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!--/tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="keywords" content="Grocery Shoppy Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
-    <script>
-    addEventListener("load", function() {
-        setTimeout(hideURLbar, 0);
-    }, false);
-
-    function hideURLbar() {
-        window.scrollTo(0, 1);
-    }
-    </script>
     <!--//tags -->
     <link href="../css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
     <link href="../css/style.css" rel="stylesheet" type="text/css" media="all" />
@@ -239,7 +226,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <div class="featured-section" id="projects">
             <div class="container">
                 <!-- tittle heading -->
-                <h3 class="tittle-w3l">Related Products
+                <h3 class="tittle-w3l">
+                    Related Products
                     <span class="heading-style">
                         <i></i>
                         <i></i>
@@ -248,61 +236,50 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </h3>
                 <!-- //tittle heading -->
                 <div class="content-bottom-in">
-                    <div class="nbs-flexisel-container">
-                        <div class="nbs-flexisel-inner">
-                            <ul id="flexiselDemo1" class="nbs-flexisel-ul" style="left: 0px;">
-                                <?php
-                                    $relatedPros = $productService->getRelatedProducts($product['productID']);
-                                    foreach ($relatedPros as $relatedPro) {
-                                ?>
-                                <li class="nbs-flexisel-item" style="width: 345px; height: 470px">
-                                    <div class="w3l-specilamk">
-                                        <div class="speioffer-agile">
-                                            <a href="single2.html">
-                                                <img src="../images/<?php echo $relatedPro["image"]; ?>" alt=""
-                                                    style="width: 280px; height: 250px">
-                                            </a>
-                                        </div>
-                                        <div class="product-name-w3l">
-                                            <h4 style="height: 50px;">
-                                                <a href="single2.html">
-                                                    <?php echo $relatedPro["name"]; ?>
-                                                </a>
-                                            </h4>
-                                            <div class="w3l-pricehkj">
-                                                <h6>$<?php echo $relatedPro["price"]; ?></h6>
-                                            </div>
-                                            <div
-                                                class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
-                                                <form action="#" method="post">
-                                                    <fieldset>
-                                                        <input type="hidden" name="cmd" value="_cart">
-                                                        <input type="hidden" name="add" value="1">
-                                                        <input type="hidden" name="business" value=" ">
-                                                        <input type="hidden" name="item_name"
-                                                            value="<?php echo $relatedPro["name"]; ?>">
-                                                        <input type="hidden" name="amount"
-                                                            value="<?php echo $relatedPro["price"]; ?>">
-
-                                                        <input type="hidden" name="currency_code" value="d">
-                                                        <input type="hidden" name="return" value=" ">
-                                                        <input type="hidden" name="cancel_return" value=" ">
-                                                        <input type="submit" name="submit" value="Add to cart"
-                                                            class="button">
-                                                    </fieldset>
-                                                </form>
-                                            </div>
-                                        </div>
+                    <ul id="flexiselDemo1">
+                        <?php 
+                    foreach($productService->getRelatedProducts($product['productID']) as $relatePro){
+                    ?>
+                        <li>
+                            <div class="w3l-specilamk">
+                                <div class="speioffer-agile">
+                                    <a href="ProductDetail.php?id=<?php echo $relatePro['productID']?>">
+                                        <img src="../images/<?php echo $relatePro['image']?>" alt=""
+                                            style="width: 230px; height: 200px" />
+                                    </a>
+                                </div>
+                                <div class="product-name-w3l">
+                                    <h4 style="height: 33px;">
+                                        <a href="ProductDetail.php?id=<?php echo $relatePro['productID']?>">
+                                            <?php echo $relatePro['name']?>
+                                        </a>
+                                    </h4>
+                                    <div class="w3l-pricehkj">
+                                        <h6>$<?php echo $relatePro['price']?></h6>
                                     </div>
-                                </li>
-                                <?php 
-                                    }
-                                ?>
-                            </ul>
-                            <div class="nbs-flexisel-nav-left" style="top: 180.5px;"></div>
-                            <div class="nbs-flexisel-nav-right" style="top: 180.5px;"></div>
-                        </div>
-                    </div>
+                                    <div
+                                        class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
+                                        <form action="#" method="post">
+                                            <fieldset>
+                                                <input type="hidden" name="cmd" value="_cart" />
+                                                <input type="hidden" name="add" value="1" />
+                                                <input type="hidden" name="business" value=" " />
+                                                <input type="hidden" name="item_name" value="Aashirvaad, 5g" />
+                                                <input type="hidden" name="amount" value="220.00" />
+                                                <input type="hidden" name="discount_amount" value="1.00" />
+                                                <input type="hidden" name="currency_code" value="USD" />
+                                                <input type="hidden" name="return" value=" " />
+                                                <input type="hidden" name="cancel_return" value=" " />
+                                                <input type="submit" name="submit" value="Add to cart" class="button" />
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <?php 
+                    }?>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -434,7 +411,36 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </div>
         </div>
         <!-- //copyright -->
+        <!-- jquery -->
+        <script src="../js/jquery-2.1.4.min.js"></script>
 
+        <script src="../js/jquery.flexisel.js"></script>
+        <script>
+        $(window).load(function() {
+            $('#flexiselDemo1').flexisel({
+                visibleItems: 3,
+                animationSpeed: 1000,
+                autoPlay: false,
+                autoPlaySpeed: 3000,
+                pauseOnHover: true,
+                enableResponsiveBreakpoints: true,
+                responsiveBreakpoints: {
+                    portrait: {
+                        changePoint: 480,
+                        visibleItems: 1,
+                    },
+                    landscape: {
+                        changePoint: 640,
+                        visibleItems: 2,
+                    },
+                    tablet: {
+                        changePoint: 768,
+                        visibleItems: 2,
+                    },
+                },
+            })
+        })
+        </script>
         <!-- smoothscroll -->
         <script src="../js/SmoothScroll.min.js"></script>
         <!-- //smoothscroll -->

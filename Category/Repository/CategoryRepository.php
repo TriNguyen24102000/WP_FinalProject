@@ -1,28 +1,34 @@
 <?php 
-    include_once('Helper/Helper.php');
-
+    //require('Helper/Helper.php');
+    
     class CategoryRepository {
-        private $conn;
 
-        public function __contruct() {
-            $this->conn = Connect();
+        public $conn;
+        
+        // constructor
+        public function __construct($conn) {
+            $this->conn = $conn;
         }
-        // get all categories
+        
+        // get all products
         public function getAllCategories() {
             $data = array();
+
             $sql = "SELECT * FROM `category`";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-                $data[] = $row;
+            $stmt = $this->conn->query($sql);
+            
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+            {
+                $data[] = $row; 
             }
+
             return $data;
         }
-
+        
         // get category by id
-        public function getCategoryById($cateId) {
+        public function getCategoryById($cateID) {
             $data = array();
-            $sql = "SELECT * FROM `category` WHERE `cateID`= $id";
+            $sql = "SELECT * FROM `category` WHERE `cateID`= $cateID";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             $data[] = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -38,13 +44,13 @@
         }
 
         // update category
-        public function updateCategory($cateID, $name, $createAt, $updateAt) {
+        public function updateCategory($category) {
             $sql = "UPDATE `category` 
-                    SET `cateID` = '$cateID',
-                        `name` = '$name',
-                        `createAt` = '$createAt',
-                        `updateAt` = '$updateAt'
-                    WHERE `cateID` = $cateID";
+                    SET `cateID` = '{$category["cateID"]}',
+                        `name` = '{$category["name"]}',
+                        `createAt` = '{$category["createAt"]}',
+                        `updateAt` = '{$category["updateAt"]}'
+                    WHERE `cateID` = '{$category["cateID"]}'";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
         }
