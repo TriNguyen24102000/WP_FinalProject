@@ -1,45 +1,68 @@
 <?php
 
-    include(__DIR__.'/../Repository/ProductRepository.php');
+include(__DIR__ . '/../Repository/ProductRepository.php');
 
-    class ProductService {
-        private $productRepo;
+class ProductService
+{
+	private $productRepo;
 
-        public function __construct(ProductRepository $productRepo) {
-            $this->productRepo = $productRepo;
-        }
+	public function __construct(ProductRepository $productRepo) {
+		$this->productRepo = $productRepo;
+	}
 
-        public function getAllProducts() {
-            return $this->productRepo->getAllProducts();
-        } 
-        
-        public function getProductsByCateId($cateID) {
-            return $this->productRepo->getProductsByCateId($cateID);
-        }
+	public function getAllProducts() {
+		return $this->productRepo->getAllProducts();
+	}
 
-        public function getProductById($id) {
-            return $this->productRepo->getProductById($id);
-        } 
+	public function getProductsByCateId($cateID) {
+		return $this->productRepo->getProductsByCateId($cateID);
+	}
 
-        public function getRelatedProducts($id) {
-            return $this->productRepo->getRelatedProducts($id);
-        }
+	public function getProductById($id) {
+		return $this->productRepo->getProductById($id);
+	}
 
-        public function getManuNameByProductId($id) {
-            return $this->productRepo->getManuNameByProductId($id);
-        }
+	public function getRelatedProducts($id, $limit) {
+		return $this->productRepo->getRelatedProducts($id, $limit);
+	}
 
-        public function getCateNameByProductId($id) {
-            return $this->productRepo->getCateNameByProductId($id);
-        }
+	public function getManuNameByProductId($id) {
+		return $this->productRepo->getManuNameByProductId($id);
+	}
 
-        public function updateProduct($product){
-            return $this->productRepo->updateProduct($product);
-        }
+	public function getCateNameByProductId($id)	{
+		return $this->productRepo->getCateNameByProductId($id);
+	}
 
-        public function insertProduct($id, $cateID, $manuID, $name, $price,$quantity,$description,$image,$createAt, $view){
-            return $this->productRepo->insertProduct($id, $cateID, $manuID, $name, $price,$quantity,$description,$image,$createAt, $view);
-        }
-    }
+	public function getBestSellingProducts($limit) {
+		return $this->productRepo->getBestSellingProducts($limit);
+	}
 
-?>
+	public function getNewestProducts($limit) {
+		return $this->productRepo->getNewestProducts($limit);
+	}
+
+	public function getPagingProducts($limit, $cateID,$manuID = 'no', $orderBy = 'no', $itemsPerPage = 6) {
+		return $this->productRepo->getPagingProducts($limit, $cateID, $manuID, $orderBy, $itemsPerPage);
+	}
+
+	public function updateProduct($product) {
+		return $this->productRepo->updateProduct($product);
+	}
+
+	public function getRelatedProductsByCateID($cateID, $limit = 10) {
+		return $this->productRepo->getRelatedProductsByCateID($cateID, $limit);
+	}
+
+	public function insertProduct($cateID, $manuID, $name, $price, $quantity, $description, $image, $createAt) {
+		return $this->productRepo->insertProduct($cateID, $manuID, $name, $price, $quantity, $description, $image, $createAt);
+	}
+
+	public function searchProductsByName($name) {
+		return $this->productRepo->searchProductsByName($name);
+	} 
+
+	public function getAllManufactures() {
+		return $this->productRepo->getAllManufacturers();
+	} 
+}

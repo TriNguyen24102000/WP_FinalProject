@@ -1,141 +1,222 @@
-<?php 
-    //require('Helper/Helper.php');
-    
-    class ProductRepository {
+<?php
+class ProductRepository {
+	public $conn;
 
-        public $conn;
-        
-        // constructor
-        public function __construct($conn) {
-            $this->conn = $conn;
-        }
-        
-        // get all products
-        public function getAllProducts() {
-            $data = array();
+	// constructor
+	public function __construct($conn) {
+		$this->conn = $conn;
+	}
 
-            $sql = "SELECT * FROM `product`";
-            $stmt = $this->conn->query($sql);
-            
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-            {
-                $data[] = $row; 
-            }
+	// get all products
+	public function getAllProducts() {
+		$data = array();
+		$sql = "SELECT * FROM `product`";
+		$stmt = $this->conn->query($sql);
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
 
-            return $data;
-        }
+	// get all product by id
+	public function getProductById($id) {
+		$data = array();
+		$sql = "SELECT * FROM `product` WHERE `productID` = $id";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data[0];
+	}
 
-        // get all product by id
-        public function getProductById($id) {
-            $data = array();
+	// get all products by category id
+	public function getProductsByCateId($cateID) {
+		$data = array();
+		$sql = "SELECT * FROM `product` WHERE `cateID` = $cateID";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
 
-            $sql = "SELECT * FROM `product` WHERE productID = $id";
-            
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
+	// get related product
+	public function getRelatedProducts($id, $limit) {
+		$data = array();
+		$sql = (
+			"SELECT * FROM `product` p1 
+					WHERE p1.productID != $id 
+						AND p1.cateID = (SELECT p.cateID FROM `product` p WHERE p.productID = $id) ORDER BY RAND() 
+			LIMIT $limit"
+		);
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
 
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-            {
-                $data[] = $row; 
-            }
+	// get special offers
+	public function getRelatedProductsByCateID($cateID, $limit) {
+		$data = array();
+		$sql = "SELECT * FROM `product` WHERE `cateID` = $cateID ORDER BY RAND() LIMIT $limit";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
 
-            return $data[0];
-        }
+	// get manufacturer name by product id
+	public function getManuNameByProductId($id) {
+		$data = array();
+		$sql = "SELECT m.`name` FROM `product` p, `manufacturer` m WHERE p.manuID = m.manuID AND p.productID = $id";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data[0]['name'];
+	}
 
-        // get all products by category id
-        public function getProductsByCateId($cateID) {
-            $data = array();
+	// get manufacturer name by product id
+	public function getCateNameByProductId($id) {
+		$data = array();
+		$sql = "SELECT c.`name` FROM `product` p, `category` c WHERE p.cateID = c.cateID AND p.productID = $id";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data[0]['name'];
+	}
 
-            $sql = "SELECT * FROM `product` WHERE cateID = $cateID";
-            
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
 
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-            {
-                $data[] = $row; 
-            }
+	// get top newest products
+	public function getNewestProducts($limit) {
+		$data = array();
+		$sql = "SELECT * FROM `product` ORDER BY `createAt` DESC LIMIT $limit";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
 
-            return $data;
-        }
-        
-        // get related product
-        public function getRelatedProducts($id) {
-            $data = array();
+	// get best salling
+	public function getBestSellingProducts($limit) {
+		$data = array();
+		$sql = "SELECT `productID`, `name`, `image`, `price`,SUM(`saleQuantity`) `quantity` FROM `order` o JOIN `order_detail` od WHERE o.orderID = od.orderID GROUP BY `productID` ORDER BY `saleQuantity` DESC LIMIT $limit";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
 
-            $sql = "SELECT * FROM product p1 WHERE p1.productID != $id AND p1.cateID = (SELECT p.cateID FROM product p WHERE p.productID = $id) ORDER BY RAND() LIMIT 5";
-            
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
+	// get paging product
+	public function getPagingProducts($limit, $cateID, $manuID ,$orderBy, $itemsPerPage) {
 
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-            {
-                $data[] = $row; 
-            }
+		if ($orderBy == "low-to-high") {
+			$orderBy = "`price`";
+		} else if ($orderBy == "high-to-low") {
+			$orderBy = "`price` DESC";
+		} else if ($orderBy == "newest") {
+			$orderBy = "`createAt` DESC";
+		
+		} else {
+			$orderBy = "`productID`";
+		}
 
-            return $data;
-        }
+		$sql = "";
+		if($manuID == 'no') {
+			$sql = "SELECT * FROM `product` WHERE `cateID` = '$cateID' ORDER BY $orderBy LIMIT $limit, $itemsPerPage";
+		} else {
+			$sql = "SELECT * FROM `product` WHERE `cateID` = '$cateID' AND `manuID` = $manuID ORDER BY $orderBy LIMIT $limit, $itemsPerPage";
+		}
 
-        // get manufacturer name by product id
-        public function getManuNameByProductId($id) {
-             $data = array();
 
-            $sql = "SELECT m.`name` FROM product p, manufacturer m WHERE p.manuID = m.manuID AND p.productID = $id";
-            
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
 
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-            {
-                $data[] = $row; 
-            }
+		
+		$data = array();
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
 
-            return $data[0]['name'];
-        }
+	// insert product
+	public function insertProduct($cateID, $manuID, $name, $price, $quantity, $description, $image, $createAt) {
+		$sql = (
+			"INSERT 
+				INTO `product` (`cateID`, `name`, `manuID`, `price`, `quantity`, `description`, `image`, `createAt`)
+				VALUES('$cateID','$name','$manuID','$price','$quantity','$description','$image', '$createAt'"
+		);
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+	}
 
-        // get manufacturer name by product id
-        public function getCateNameByProductId($id) {
-             $data = array();
+	// update product
+	public function updateProduct($product) {
+		$sql = (
+			"UPDATE `product`
+				SET
+					`name` = :name,
+					`manuID` = :manuID,
+					`quantity` = :quantity,
+					`view` = :view,
+					`createAt` = :createAt,
+					`updateAt` = :updateAt, 
+					`description` = :description,
+					`cateID` = :cateID,
+					`price` = :price,
+					`image` = :image
+				WHERE `productID` = :productID"
+		);
 
-            $sql = "SELECT c.`name` FROM product p, category c WHERE p.cateID = c.cateID AND p.productID = $id";
-            
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bindParam(':name', $product['name'], PDO::PARAM_STR);
+		$stmt->bindParam(':manuID', $product['manuID']);
+		$stmt->bindParam(':quantity', $product['quantity']);
+		$stmt->bindParam(':view', $product['view']);
+		$stmt->bindParam(':createAt', $product['createAt']);
+		$stmt->bindParam(':updateAt', $product['updateAt']);
+		$stmt->bindParam(':description', $product['description']);
+		$stmt->bindParam(':cateID', $product['cateID']);
+		$stmt->bindParam(':price', $product['price']);
+		$stmt->bindParam(':image', $product['image']);
+		$stmt->bindParam(':productID', $product['productID'], PDO::PARAM_INT);
 
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-            {
-                $data[] = $row; 
-            }
+		$stmt->execute();
+	}
 
-            return $data[0]['name'];
-        }
+	public function searchProductsByName($name) {
+		$data = array();
+		$sql = "SELECT * FROM `product` WHERE name LIKE '%$name%'";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
 
-        // insert product
-        public function insertProduct($cateID, $manuID, $name, $price,$quantity,$description,$image,$createAt, $view, $productID = 'NULL'){
-            $sql = "INSERT INTO product
-                    VALUES('$productID','$cateID','$manuID','$price','$quantity','$description','$image','$createAt','$view','NULL')";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
-        }
-        
-        // update product
-        public function updateProduct($product) {
-            $sql = "UPDATE product
-                    SET 
-                        `name` = `{$product['name']}`,
-                        `manuID` = `{$product['manuID']}`,
-                        `quantity` = {$product['quantity']},
-                        `view` = {$product['view']},
-                        `createAt` = {$product['createAt']},
-                        `updateAt` = {$product['updateAt']}, 
-                        `description` = {$product['description']},
-                        `cateID` = {$product['cateID']},
-                        `price` = {$product['price']},
-                        `image` = {$product['image']}
-                    WHERE productID = {$product['productID']}";
-            
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
-        }
-    }
-?>
+	public function getAllManufacturers() {
+		$data = array();
+		$sql = "SELECT * FROM `manufacturer`";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute ();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
+}
