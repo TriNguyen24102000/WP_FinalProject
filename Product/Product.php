@@ -1,9 +1,8 @@
 <?php
 include_once('Service/ProductService.php');
-
 include('../Category/Service/CategoryService.php');
-
 include('Helper/Helper.php');
+include('../Header/Header.php');
 
 $db = Connect();
 
@@ -49,21 +48,22 @@ $limit = ($currentPage - 1) * $itemPerPage;
 
 $products = $productService->getPagingProducts($limit, $cateID, $manuID, $filter, $itemPerPage);
 
-echo 'manuID: ' . $manuID . 'cateID: ' . $cateID;
+// load header
+loadHeader($selectedCate['name']);
 ?>
+
 
 
 <!DOCTYPE html>
 <html lang="zxx">
 
 <head>
-	<title><?php echo $selectedCate['name'] ?></title>
 	<!--/tags -->
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script>
 		addEventListener(
-			'load',
+			"load",
 			function() {
 				setTimeout(hideURLbar, 0)
 			},
@@ -88,61 +88,8 @@ echo 'manuID: ' . $manuID . 'cateID: ' . $cateID;
 </head>
 
 <body>
-	<!-- header-bot-->
-	<div class="header-bot">
-		<div class="header-bot_inner_wthreeinfo_header_mid">
-			<!-- header-bot-->
-			<div class="col-md-4 logo_agile">
-				<h1 style="margin-top: 30px; margin-left: -100px;">
-					<a href="index.html" <span>O</span>izoioi <span>M</span>art
-					</a>
-				</h1>
-			</div>
-			<!-- header-bot -->
-			<div class=" col-md-8 header">
-				<!-- header lists -->
-				<ul>
-					<li><span class="fa fa-phone" aria-hidden="true"></span>028 3915 5812</li>
-					<li>
-						<a href="#" data-toggle="modal" data-target="#myModal1">
-							<span class="fa fa-unlock-alt" aria-hidden="true"></span> Sign In
-						</a>
-					</li>
-					<li>
-						<a href="#" data-toggle="modal" data-target="#myModal2">
-							<span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up
-						</a>
-					</li>
-				</ul>
-				<!-- //header lists -->
-				<!-- search -->
-				<div class="agileits_search">
-					<form action="#" method="post">
-						<input name="Search" type="search" placeholder="Search" required="" />
-						<button type="submit" class="btn btn-default" aria-label="Left Align">
-							<span class="fa fa-search" aria-hidden="true"> </span>
-						</button>
-					</form>
-				</div>
-				<!-- //search -->
-				<!-- cart details -->
-				<div class="top_nav_right">
-					<div class="wthreecartaits wthreecartaits2 cart cart box_1">
-						<form action="#" method="post" class="last">
-							<input type="hidden" name="cmd" value="_cart" />
-							<input type="hidden" name="display" value="1" />
-							<button class="w3view-cart" type="submit" name="submit" value="">
-								<i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
-							</button>
-						</form>
-					</div>
-				</div>
-				<!-- //cart details -->
-				<div class="clearfix"></div>
-			</div>
-			<div class="clearfix"></div>
-		</div>
-	</div>
+
+
 
 	<!-- page -->
 	<div class="services-breadcrumb">
@@ -220,9 +167,9 @@ echo 'manuID: ' . $manuID . 'cateID: ' . $cateID;
 							<select id="agileinfo-nav_search" name="filter-option" onChange="this.form.submit()">
 								<option <?php echo (strval($filter) == "no" ? "selected" : "") ?> value="no">No</option>
 								<option <?php echo (strval($filter) == "low-to-high" ? "selected" : "") ?> value="low-to-high">Low to high price</option>
-								<option <?php echo (strval($filter) == "high-to-low" ? "selected" : "") ?> value="high-to-low">high to low price</option>
+								<option <?php echo (strval($filter) == "high-to-low" ? "selected" : "") ?> value="high-to-low">High to low price</option>
 								<option <?php echo (strval($filter) == "newest" ? "selected" : "") ?> value="newest">
-									newest product</option>
+									Newest products</option>
 							</select>
 						</form>
 					</div>
