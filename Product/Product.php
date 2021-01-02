@@ -1,6 +1,8 @@
 <?php
 include_once('Service/ProductService.php');
+
 include('../Category/Service/CategoryService.php');
+
 include('Helper/Helper.php');
 
 $db = Connect();
@@ -21,7 +23,7 @@ $filter = isset($_GET['filter']) ? $_GET['filter'] : 'no';
 $filter = isset($_POST['filter-option']) ? $_POST['filter-option'] : $filter;
 
 // get selected manufacture id
-$manuID = isset($_POST['manu-option']) ? $_POST['manu-option']: 'no';
+$manuID = isset($_POST['manu-option']) ? $_POST['manu-option'] : 'no';
 
 // get current page
 $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -47,7 +49,7 @@ $limit = ($currentPage - 1) * $itemPerPage;
 
 $products = $productService->getPagingProducts($limit, $cateID, $manuID, $filter, $itemPerPage);
 
-echo 'manuID: '.$manuID.'cateID: '.$cateID; 
+echo 'manuID: ' . $manuID . 'cateID: ' . $cateID;
 ?>
 
 
@@ -171,11 +173,11 @@ echo 'manuID: '.$manuID.'cateID: '.$cateID;
 					<li>of</li>
 					<li>
 						<div>
-							<form action="Product.php?page=1&cateID=<?php echo  $cateID?>" method="post">
+							<form action="Product.php?page=1&cateID=<?php echo  $cateID ?>" method="post">
 								<select id="agileinfo-nav_search" name="manu-option" style="width: 200px;" onChange="this.form.submit()">
-								<option selected value="no">
-											All manufactures
-										</option>
+									<option selected value="no">
+										All manufactures
+									</option>
 									<?php
 									foreach ($manufactures as $manufacture) {
 									?>
@@ -187,7 +189,7 @@ echo 'manuID: '.$manuID.'cateID: '.$cateID;
 									?>
 								</select>
 							</form>
-							</div>
+						</div>
 					</li>
 				</ul>
 			</div>
@@ -214,7 +216,7 @@ echo 'manuID: '.$manuID.'cateID: '.$cateID;
 				<div class="range">
 					<h3 class="agileits-sear-head">Filter</h3>
 					<div>
-						<form action="Product.php?page=<?php echo $currentPage ?>" method="POST">
+						<form action="Product.php?page=<?php echo $currentPage ?>&cateID=<?php echo $cateID ?>" method="POST">
 							<select id="agileinfo-nav_search" name="filter-option" onChange="this.form.submit()">
 								<option <?php echo (strval($filter) == "no" ? "selected" : "") ?> value="no">No</option>
 								<option <?php echo (strval($filter) == "low-to-high" ? "selected" : "") ?> value="low-to-high">Low to high price</option>
@@ -279,9 +281,10 @@ echo 'manuID: '.$manuID.'cateID: '.$cateID;
 
 					<div class="text-center">
 						<ul class="pagination pagination-lg">
-							<li class="page-item"><a class="page-link" 
-							href="Product.php?page=
-							<?php echo ($currentPage - 1 == 0 ? 1 : $currentPage - 1) . '&filter=' . $filter ?>">Previous</a>
+							<li class="page-item"><a class="page-link" href="Product.php?page=
+							<?php
+							echo ($currentPage - 1 == 0 ? 1 : $currentPage - 1)
+								. '&filter=' . $filter . '&cateID=' . $cateID ?>">Previous</a>
 							</li>
 
 							<?php
@@ -290,17 +293,17 @@ echo 'manuID: '.$manuID.'cateID: '.$cateID;
 							for ($i = $start; $i < ($start + 5); $i++) {
 								if ($i == $currentPage) {
 									echo '<li class="page-item active"><a class="page-link" 
-                                        href="">' . $i . '</a></li>';
+                          href="">' . $i . '</a></li>';
 								} else if ($i > $totalPage) {
 									echo '<li class="page-item"><a class="page-link" 
-                                        href="">' . $i . '</a></li>';
+                          href="">' . $i . '</a></li>';
 								} else {
 									echo '<li class="page-item"><a class="page-link" 
-                                        href="Product.php?page=' . $i . '&filter=' . $filter . '">' . $i . '</a></li>';
+                          href="Product.php?page=' . $i . '&filter=' . $filter . '&cateID=' . $cateID . '">' . $i . '</a></li>';
 								}
 							}
 							?>
-							<li class="page-item"><a class="page-link" href="Product.php?page=<?php echo ($currentPage + 1 > $totalPage ? $totalPage : $currentPage + 1) . '&filter=' . $filter ?>">Next</a>
+							<li class="page-item"><a class="page-link" href="Product.php?page=<?php echo ($currentPage + 1 > $totalPage ? $totalPage : $currentPage + 1) . '&filter=' . $filter . '&cateID=' . $cateID ?>">Next</a>
 							</li>
 						</ul>
 					</div>
