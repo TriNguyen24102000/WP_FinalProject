@@ -2,6 +2,7 @@
 include_once('Service/ProductService.php');
 include('Helper/Helper.php');
 include('../Category/Service/CategoryService.php');
+include('../Header/Header.php');
 
 $db = Connect();
 
@@ -18,6 +19,7 @@ $productService->updateProduct($product);
 // categories
 $categoryService = new CategoryService(new CategoryRepository($db));
 $categories = $categoryService->getAllCategories();
+loadHeader($product['name']);
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +28,6 @@ $categories = $categoryService->getAllCategories();
 </html>
 
 <head>
-  <title><?php echo $product['name'] ?></title>
   <!--/tags -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -43,61 +44,6 @@ $categories = $categoryService->getAllCategories();
 <body>
 
   <body data-new-gr-c-s-check-loaded="14.990.0" data-gr-ext-installed="">
-    <!-- header-bot-->
-    <div class="header-bot">
-      <div class="header-bot_inner_wthreeinfo_header_mid">
-        <!-- header-bot-->
-        <div class="col-md-4 logo_agile">
-          <h1 style="margin-top: 30px; margin-left: -100px;">
-            <a href="#" <span>O</span>izoioi <span>M</span>art
-            </a>
-          </h1>
-        </div>
-        <!-- header-bot -->
-        <div class="col-md-8 header">
-          <!-- header lists -->
-          <ul>
-            <span class="fa fa-phone" aria-hidden="true"></span> 028 3915 5812
-            <li>
-              <a href="#" data-toggle="modal" data-target="#myModal1">
-                <span class="fa fa-unlock-alt" aria-hidden="true"></span> Sign In </a>
-            </li>
-            <li>
-              <a href="#" data-toggle="modal" data-target="#myModal2">
-                <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up </a>
-            </li>
-          </ul>
-          <!-- //header lists -->
-          <!-- search -->
-          <div class="agileits_search">
-            <form action="#" method="post">
-              <input name="Search" type="search" placeholder="Search" required="">
-              <button type="submit" class="btn btn-default" aria-label="Left Align">
-                <span class="fa fa-search" aria-hidden="true"> </span>
-              </button>
-            </form>
-          </div>
-          <!-- //search -->
-          <!-- cart details -->
-          <div class="top_nav_right">
-            <div class="wthreecartaits wthreecartaits2 cart cart box_1">
-              <form action="#" method="post" class="last">
-                <input type="hidden" name="cmd" value="_cart">
-                <input type="hidden" name="display" value="1">
-                Cart
-                <button class="w3view-cart" type="submit" name="submit" value="">
-                  <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
-                </button>
-              </form>
-            </div>
-          </div>
-          <!-- //cart details -->
-          <div class="clearfix"></div>
-        </div>
-        <div class="clearfix"></div>
-      </div>
-    </div>
-
     <!-- page -->
     <div class="services-breadcrumb">
       <div class="agile_inner_breadcrumb">
@@ -108,7 +54,7 @@ $categories = $categoryService->getAllCategories();
               <i>|</i>
             </li>
             <li>
-              <?php echo $productService->getCateNameByProductId($id)?>
+              <?php echo 'Category ' . $productService->getCateNameByProductId($id) ?>
             </li>
           </ul>
         </div>
@@ -326,9 +272,9 @@ $categories = $categoryService->getAllCategories();
               <h3>Categories</h3>
               <ul>
                 <?php
-                foreach($categories as $category) {
+                foreach ($categories as $category) {
                   echo '<li>
-                            <a href="Product.php?page=1&cateID='.$category['cateID'].'">'.$category['name'].'</a>
+                            <a href="Product.php?page=1&cateID=' . $category['cateID'] . '">' . $category['name'] . '</a>
                         </li>';
                 }
                 ?>

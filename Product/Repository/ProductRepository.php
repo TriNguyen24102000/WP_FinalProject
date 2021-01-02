@@ -1,14 +1,50 @@
 <?php
-class ProductRepository {
+
+
+class Product
+{
+	public $productID;
+	public $cateID;
+	public $manuID;
+	public $name;
+	public $price;
+	public $quantity;
+	public $description;
+	public $view;
+	public $image;
+	public $createAt;
+	public $updateAt;
+
+	public function __construct($productID, $cateID, $manuID, $name, $price, $quantity, $description, $view, $image, $createAt, $updateAt)
+	{
+		$this->productID = $productID;
+		$this->cateID = $cateID;
+		$this->manuID = $manuID;
+		$this->name = $name;
+		$this->price = $price;
+		$this->quantity = $quantity;
+		$this->description = $description;
+		$this->view = $view;
+		$this->image = $image;
+		$this->createAt = $createAt;
+		$this->updateAt = $updateAt;
+	}
+}
+
+
+class ProductRepository
+{
 	public $conn;
 
 	// constructor
-	public function __construct($conn) {
+	public function __construct($conn)
+	{
 		$this->conn = $conn;
 	}
 
 	// get all products
-	public function getAllProducts() {
+	public function getAllProducts()
+	{
 		$data = array();
 		$sql = "SELECT * FROM `product`";
 		$stmt = $this->conn->query($sql);
@@ -19,7 +55,8 @@ class ProductRepository {
 	}
 
 	// get all product by id
-	public function getProductById($id) {
+	public function getProductById($id)
+	{
 		$data = array();
 		$sql = "SELECT * FROM `product` WHERE `productID` = $id";
 		$stmt = $this->conn->prepare($sql);
@@ -31,7 +68,8 @@ class ProductRepository {
 	}
 
 	// get all products by category id
-	public function getProductsByCateId($cateID) {
+	public function getProductsByCateId($cateID)
+	{
 		$data = array();
 		$sql = "SELECT * FROM `product` WHERE `cateID` = $cateID";
 		$stmt = $this->conn->prepare($sql);
@@ -43,14 +81,13 @@ class ProductRepository {
 	}
 
 	// get related product
-	public function getRelatedProducts($id, $limit) {
+	public function getRelatedProducts($id, $limit)
+	{
 		$data = array();
-		$sql = (
-			"SELECT * FROM `product` p1 
+		$sql = ("SELECT * FROM `product` p1 
 					WHERE p1.productID != $id 
 						AND p1.cateID = (SELECT p.cateID FROM `product` p WHERE p.productID = $id) ORDER BY RAND() 
-			LIMIT $limit"
-		);
+			LIMIT $limit");
 		$stmt = $this->conn->prepare($sql);
 		$stmt->execute();
 		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -60,7 +97,8 @@ class ProductRepository {
 	}
 
 	// get special offers
-	public function getRelatedProductsByCateID($cateID, $limit) {
+	public function getRelatedProductsByCateID($cateID, $limit)
+	{
 		$data = array();
 		$sql = "SELECT * FROM `product` WHERE `cateID` = $cateID ORDER BY RAND() LIMIT $limit";
 		$stmt = $this->conn->prepare($sql);
@@ -72,7 +110,8 @@ class ProductRepository {
 	}
 
 	// get manufacturer name by product id
-	public function getManuNameByProductId($id) {
+	public function getManuNameByProductId($id)
+	{
 		$data = array();
 		$sql = "SELECT m.`name` FROM `product` p, `manufacturer` m WHERE p.manuID = m.manuID AND p.productID = $id";
 		$stmt = $this->conn->prepare($sql);
@@ -84,7 +123,8 @@ class ProductRepository {
 	}
 
 	// get manufacturer name by product id
-	public function getCateNameByProductId($id) {
+	public function getCateNameByProductId($id)
+	{
 		$data = array();
 		$sql = "SELECT c.`name` FROM `product` p, `category` c WHERE p.cateID = c.cateID AND p.productID = $id";
 		$stmt = $this->conn->prepare($sql);
@@ -97,7 +137,8 @@ class ProductRepository {
 
 
 	// get top newest products
-	public function getNewestProducts($limit) {
+	public function getNewestProducts($limit)
+	{
 		$data = array();
 		$sql = "SELECT * FROM `product` ORDER BY `createAt` DESC LIMIT $limit";
 		$stmt = $this->conn->prepare($sql);
@@ -109,7 +150,8 @@ class ProductRepository {
 	}
 
 	// get best salling
-	public function getBestSellingProducts($limit) {
+	public function getBestSellingProducts($limit)
+	{
 		$data = array();
 		$sql = "SELECT `productID`, `name`, `image`, `price`,SUM(`saleQuantity`) `quantity` FROM `order` o JOIN `order_detail` od WHERE o.orderID = od.orderID GROUP BY `productID` ORDER BY `saleQuantity` DESC LIMIT $limit";
 		$stmt = $this->conn->prepare($sql);
@@ -121,7 +163,8 @@ class ProductRepository {
 	}
 
 	// get paging product
-	public function getPagingProducts($limit, $cateID, $manuID ,$orderBy, $itemsPerPage) {
+	public function getPagingProducts($limit, $cateID, $manuID, $orderBy, $itemsPerPage)
+	{
 
 		if ($orderBy == "low-to-high") {
 			$orderBy = "`price`";
@@ -129,13 +172,12 @@ class ProductRepository {
 			$orderBy = "`price` DESC";
 		} else if ($orderBy == "newest") {
 			$orderBy = "`createAt` DESC";
-		
 		} else {
 			$orderBy = "`productID`";
 		}
 
 		$sql = "";
-		if($manuID == 'no') {
+		if ($manuID == 'no') {
 			$sql = "SELECT * FROM `product` WHERE `cateID` = '$cateID' ORDER BY $orderBy LIMIT $limit, $itemsPerPage";
 		} else {
 			$sql = "SELECT * FROM `product` WHERE `cateID` = '$cateID' AND `manuID` = $manuID ORDER BY $orderBy LIMIT $limit, $itemsPerPage";
@@ -143,7 +185,7 @@ class ProductRepository {
 
 
 
-		
+
 		$data = array();
 		$stmt = $this->conn->prepare($sql);
 		$stmt->execute();
@@ -154,20 +196,19 @@ class ProductRepository {
 	}
 
 	// insert product
-	public function insertProduct($cateID, $manuID, $name, $price, $quantity, $description, $image, $createAt) {
-		$sql = (
-			"INSERT 
+	public function insertProduct($cateID, $manuID, $name, $price, $quantity, $description, $image, $createAt)
+	{
+		$sql = ("INSERT 
 				INTO `product` (`cateID`, `name`, `manuID`, `price`, `quantity`, `description`, `image`, `createAt`)
-				VALUES('$cateID','$name','$manuID','$price','$quantity','$description','$image', '$createAt'"
-		);
+				VALUES('$cateID','$name','$manuID','$price','$quantity','$description','$image', '$createAt'");
 		$stmt = $this->conn->prepare($sql);
 		$stmt->execute();
 	}
 
 	// update product
-	public function updateProduct($product) {
-		$sql = (
-			"UPDATE `product`
+	public function updateProduct($product)
+	{
+		$sql = ("UPDATE `product`
 				SET
 					`name` = :name,
 					`manuID` = :manuID,
@@ -179,8 +220,7 @@ class ProductRepository {
 					`cateID` = :cateID,
 					`price` = :price,
 					`image` = :image
-				WHERE `productID` = :productID"
-		);
+				WHERE `productID` = :productID");
 
 		$stmt = $this->conn->prepare($sql);
 		$stmt->bindParam(':name', $product['name'], PDO::PARAM_STR);
@@ -198,7 +238,8 @@ class ProductRepository {
 		$stmt->execute();
 	}
 
-	public function searchProductsByName($name) {
+	public function searchProductsByName($name)
+	{
 		$data = array();
 		$sql = "SELECT * FROM `product` WHERE name LIKE '%$name%'";
 		$stmt = $this->conn->prepare($sql);
@@ -209,11 +250,12 @@ class ProductRepository {
 		return $data;
 	}
 
-	public function getAllManufacturers() {
+	public function getAllManufacturers()
+	{
 		$data = array();
 		$sql = "SELECT * FROM `manufacturer`";
 		$stmt = $this->conn->prepare($sql);
-		$stmt->execute ();
+		$stmt->execute();
 		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			$data[] = $row;
 		}
