@@ -25,6 +25,16 @@ class ProductService
 		return $this->productRepo->getProductById($id);
 	}
 
+	public function getSearchProducts($name, $cateID, $manuID, $price1, $price2)
+	{
+		return $this->productRepo->getSearchProducts($name, $cateID, $manuID, $price1, $price2);
+	}
+
+	public function getPagingSearchProducts($name, $cateID, $manuID, $price1, $price2, $limit, $itemsPerPage)
+	{
+		return $this->productRepo->getPagingSearchProducts($name, $cateID, $manuID, $price1, $price2, $limit, $itemsPerPage);
+	}
+
 	public function getRelatedProducts($id, $limit)
 	{
 		return $this->productRepo->getRelatedProducts($id, $limit);
@@ -68,6 +78,11 @@ class ProductService
 	public function insertProduct($cateID, $manuID, $name, $price, $quantity, $description, $image, $createAt)
 	{
 		return $this->productRepo->insertProduct($cateID, $manuID, $name, $price, $quantity, $description, $image, $createAt);
+	}
+
+	public function getManufacturerById($manuID)
+	{
+		return $this->productRepo->getManufacturerById($manuID);
 	}
 
 	public function searchProductsByName($name)

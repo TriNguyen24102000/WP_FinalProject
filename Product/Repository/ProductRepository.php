@@ -178,13 +178,12 @@ class ProductRepository
 
 		$sql = "";
 		if ($manuID == 'no') {
-			$sql = "SELECT * FROM `product` WHERE `cateID` = '$cateID' ORDER BY $orderBy LIMIT $limit, $itemsPerPage";
+			$sql = "SELECT * FROM `product` 
+			WHERE `cateID` = '$cateID' ORDER BY $orderBy LIMIT $limit, $itemsPerPage";
 		} else {
-			$sql = "SELECT * FROM `product` WHERE `cateID` = '$cateID' AND `manuID` = $manuID ORDER BY $orderBy LIMIT $limit, $itemsPerPage";
+			$sql = "SELECT * FROM `product` 
+			WHERE `cateID` = '$cateID' AND `manuID` = $manuID ORDER BY $orderBy LIMIT $limit, $itemsPerPage";
 		}
-
-
-
 
 		$data = array();
 		$stmt = $this->conn->prepare($sql);
@@ -195,6 +194,81 @@ class ProductRepository
 		return $data;
 	}
 
+	public function getSearchProducts($name, $cateID, $manuID, $price1, $price2)
+	{
+		$sql = "";
+		if ($cateID == 'no' && $manuID == 'no' && $price1 == 'no' && $price2 == 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%'";
+		} else if ($manuID == 'no' && $price1 == 'no' && $price2 == 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `cateID`= '$cateID'";
+		} else if ($price1 == 'no' && $price2 == 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `cateID`= '$cateID' AND `manuID` = '$manuID'";
+		} else if ($price1 != 'no' && $price2 != 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `cateID`= '$cateID' AND `manuID` = '$manuID'
+			AND `price` <= '$price2' AND `price` >= '$price1'";
+		} else if ($cateID == 'no' && $manuID == 'no' && $price1 != 'no' && $price2 != 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `price` <= '$price2' AND `price` >= '$price1'";
+		} else if ($manuID == 'no' && $price1 != 'no' && $price2 != 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `cateID` = '$cateID'
+			AND `price` <= '$price2' AND `price` >= '$price1'";
+		} else {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `manuID` = '$manuID'
+			AND `price` <= '$price2' AND `price` >= '$price1'";
+		}
+
+		$data = array();
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
+
+
+	public function getPagingSearchProducts($name, $cateID, $manuID, $price1, $price2, $limit, $itemsPerPage)
+	{
+		$sql = "";
+		if ($cateID == 'no' && $manuID == 'no' && $price1 == 'no' && $price2 == 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' LIMIT $limit, $itemsPerPage";
+		} else if ($manuID == 'no' && $price1 == 'no' && $price2 == 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `cateID`= '$cateID' LIMIT $limit, $itemsPerPage";
+		} else if ($price1 == 'no' && $price2 == 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `cateID`= '$cateID' AND `manuID` = '$manuID' LIMIT $limit, $itemsPerPage";
+		} else if ($price1 != 'no' && $price2 != 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `cateID`= '$cateID' AND `manuID` = '$manuID'
+			AND `price` <= '$price2' AND `price` >= '$price1' LIMIT $limit, $itemsPerPage";
+		} else if ($cateID == 'no' && $manuID == 'no' && $price1 != 'no' && $price2 != 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `price` <= '$price2' AND `price` >= '$price1' LIMIT $limit, $itemsPerPage";
+		} else if ($manuID == 'no' && $price1 != 'no' && $price2 != 'no') {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `cateID` = '$cateID'
+			AND `price` <= '$price2' AND `price` >= '$price1' LIMIT $limit, $itemsPerPage";
+		} else {
+			$sql = "SELECT * FROM `product` WHERE `name` LIKE '%$name%' AND `manuID` = '$manuID'
+			AND `price` <= '$price2' AND `price` >= '$price1' LIMIT $limit, $itemsPerPage";
+		}
+
+		$data = array();
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data;
+	}
+
+	public function getManufacturerById($manuID)
+	{
+
+		$data = array();
+		$sql = "SELECT * FROM `manufacturer` WHERE `manuID` = '$manuID'";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+		return $data[0];
+	}
 	// insert product
 	public function insertProduct($cateID, $manuID, $name, $price, $quantity, $description, $image, $createAt)
 	{

@@ -1,7 +1,7 @@
 <?php
 function loadHeader($title)
 {
-  echo '
+  echo ('
     <!DOCTYPE html>
     <html lang="zxx">
 
@@ -18,7 +18,6 @@ function loadHeader($title)
           },
           false
         )
-
         function hideURLbar() {
           window.scrollTo(0, 1)
         }
@@ -35,7 +34,6 @@ function loadHeader($title)
       <!-- fonts -->
       <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet" />
     </head>
-
     <body>
       <!-- header-bot-->
       <div class="header-bot">
@@ -66,8 +64,8 @@ function loadHeader($title)
             <!-- //header lists -->
             <!-- search -->
             <div class="agileits_search">
-              <form action="#" method="post">
-                <input name="Search" type="search" placeholder="Search" required="" />
+              <form action="../Search/Search.php?page=1&cateID=no&manuID=no" method="post">
+                <input name="search" type="search" placeholder="Search" required="" />
                 <button type="submit" class="btn btn-default" aria-label="Left Align">
                   <span class="fa fa-search" aria-hidden="true"> </span>
                 </button>
@@ -92,5 +90,5 @@ function loadHeader($title)
           <div class="clearfix"></div>
         </div>
       </div>
-    ';
+    ');
 }

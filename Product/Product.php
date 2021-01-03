@@ -53,7 +53,6 @@ loadHeader($selectedCate['name']);
 ?>
 
 
-
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -88,9 +87,6 @@ loadHeader($selectedCate['name']);
 </head>
 
 <body>
-
-
-
 	<!-- page -->
 	<div class="services-breadcrumb">
 		<div class="agile_inner_breadcrumb">
@@ -107,7 +103,8 @@ loadHeader($selectedCate['name']);
 									<?php
 									foreach ($categories as $category) {
 									?>
-										<option <?php echo (strval($cateID) == strval($category["cateID"]) ? "selected" : "") ?> value="<?php echo $category["cateID"] ?>">
+										<option <?php
+														echo (strval($cateID) == strval($category["cateID"]) ? "selected" : "") ?> value="<?php echo $category["cateID"] ?>">
 											<?php echo $category["name"] ?>
 										</option>
 									<?php
@@ -128,7 +125,9 @@ loadHeader($selectedCate['name']);
 									<?php
 									foreach ($manufactures as $manufacture) {
 									?>
-										<option <?php echo (strval($manuID) == strval($manufacture["manuID"]) ? "selected" : "") ?> value="<?php echo $manufacture["manuID"] ?>">
+										<option <?php
+														echo (strval($manuID) == strval($manufacture["manuID"]) ? "selected" : "") ?> value="
+														<?php echo $manufacture["manuID"] ?>">
 											<?php echo $manufacture["name"] ?>
 										</option>
 									<?php
@@ -165,10 +164,13 @@ loadHeader($selectedCate['name']);
 					<div>
 						<form action="Product.php?page=<?php echo $currentPage ?>&cateID=<?php echo $cateID ?>" method="POST">
 							<select id="agileinfo-nav_search" name="filter-option" onChange="this.form.submit()">
-								<option <?php echo (strval($filter) == "no" ? "selected" : "") ?> value="no">No</option>
-								<option <?php echo (strval($filter) == "low-to-high" ? "selected" : "") ?> value="low-to-high">Low to high price</option>
+								<option <?php
+												echo (strval($filter) == "no" ? "selected" : "") ?> value="no">No</option>
+								<option <?php
+												echo (strval($filter) == "low-to-high" ? "selected" : "") ?> value="low-to-high">Low to high price</option>
 								<option <?php echo (strval($filter) == "high-to-low" ? "selected" : "") ?> value="high-to-low">High to low price</option>
-								<option <?php echo (strval($filter) == "newest" ? "selected" : "") ?> value="newest">
+								<option <?php
+												echo (strval($filter) == "newest" ? "selected" : "") ?> value="newest">
 									Newest products</option>
 							</select>
 						</form>
@@ -183,22 +185,22 @@ loadHeader($selectedCate['name']);
 					<!-- first section -->
 					<div class="product-sec1">
 						<?php
-						for ($i = 0; $i < 6; $i++) {
+						foreach ($products as $product) {
 						?>
 							<div class="col-xs-4 product-men" style="width: 260px; height: 420px">
 								<div class="men-pro-item simpleCart_shelfItem">
 									<div class="men-thumb-item">
-										<a href="ProductDetail.php?id=<?php echo $products[$i]['productID'] ?>">
-											<img src="../images/<?php echo $products[$i]['image'] ?>" alt="" style="width: 230px; height: 200px" />
+										<a href="ProductDetail.php?id=<?php echo $product['productID'] ?>">
+											<img src="../images/<?php echo $product['image'] ?>" alt="" style="width: 230px; height: 200px" />
 										</a>
 									</div>
 									<div class="item-info-product">
 										<h4 style="height: 33px;">
-											<a href="ProductDetail.php?id=<?php echo $products[$i]['productID'] ?>"><?php echo $products[$i]['name'] ?>
+											<a href="ProductDetail.php?id=<?php echo $product['productID'] ?>"><?php echo $product['name'] ?>
 											</a>
 										</h4>
 										<div class="info-product-price">
-											<span class="item_price">$<?php echo $products[$i]['price'] ?></span>
+											<span class="item_price">$<?php echo $product['price'] ?></span>
 										</div>
 										<div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
 											<form action="#" method="post">
@@ -224,33 +226,56 @@ loadHeader($selectedCate['name']);
 						?>
 						<div class="clearfix"></div>
 					</div>
-					<!-- //first section -->
 
+					<!-- //first section -->
 					<div class="text-center">
 						<ul class="pagination pagination-lg">
 							<li class="page-item"><a class="page-link" href="Product.php?page=
 							<?php
 							echo ($currentPage - 1 == 0 ? 1 : $currentPage - 1)
-								. '&filter=' . $filter . '&cateID=' . $cateID ?>">Previous</a>
+								. '&filter='
+								. $filter
+								. '&cateID='
+								. $cateID ?>">Previous</a>
 							</li>
-
 							<?php
 							$idx = intval($currentPage / 5);
 							$start = $idx == 0 ? $idx * 5 + 1 : $idx * 5;
 							for ($i = $start; $i < ($start + 5); $i++) {
 								if ($i == $currentPage) {
-									echo '<li class="page-item active"><a class="page-link" 
-                          href="">' . $i . '</a></li>';
+									echo ('<li class="page-item active">
+											<a class="page-link" 
+													href="">'
+										. $i
+										. '</a></li>');
 								} else if ($i > $totalPage) {
-									echo '<li class="page-item"><a class="page-link" 
-                          href="">' . $i . '</a></li>';
+									echo ('<li class="page-item">
+											<a class="page-link" 
+													href="">'
+										. $i .
+										'</a></li>');
 								} else {
-									echo '<li class="page-item"><a class="page-link" 
-                          href="Product.php?page=' . $i . '&filter=' . $filter . '&cateID=' . $cateID . '">' . $i . '</a></li>';
+									echo ('<li class="page-item">
+											<a class="page-link" href="Product.php?page='
+										. $i . '&filter='
+										. $filter
+										. '&cateID='
+										. $cateID
+										. '">'
+										. $i
+										. '</a>
+									</li>');
 								}
 							}
 							?>
-							<li class="page-item"><a class="page-link" href="Product.php?page=<?php echo ($currentPage + 1 > $totalPage ? $totalPage : $currentPage + 1) . '&filter=' . $filter . '&cateID=' . $cateID ?>">Next</a>
+							<li class="page-item"><a class="page-link" href="Product.php?page=
+							<?php
+							echo (
+								($currentPage + 1 > $totalPage ? $totalPage : $currentPage + 1)
+								. '&filter='
+								. $filter
+								. '&cateID='
+								. $cateID) ?>">Next</a>
 							</li>
 						</ul>
 					</div>
@@ -396,7 +421,6 @@ loadHeader($selectedCate['name']);
 		jQuery(document).ready(function($) {
 			$('.scroll').click(function(event) {
 				event.preventDefault()
-
 				$('html,body').animate({
 						scrollTop: $(this.hash).offset().top,
 					},
@@ -406,7 +430,6 @@ loadHeader($selectedCate['name']);
 		})
 	</script>
 	<!-- //end-smooth-scrolling -->
-
 	<!-- for bootstrap working -->
 	<script src="../js/bootstrap.js"></script>
 	<!-- //for bootstrap working -->

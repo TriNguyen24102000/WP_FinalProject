@@ -273,9 +273,13 @@ loadHeader($product['name']);
               <ul>
                 <?php
                 foreach ($categories as $category) {
-                  echo '<li>
-                            <a href="Product.php?page=1&cateID=' . $category['cateID'] . '">' . $category['name'] . '</a>
-                        </li>';
+                  echo ('<li>
+                    <a href="Product.php?page=1&cateID='
+                    . $category['cateID']
+                    . '">'
+                    . $category['name']
+                    . '</a>
+                        </li>');
                 }
                 ?>
               </ul>
@@ -386,7 +390,6 @@ loadHeader($product['name']);
       jQuery(document).ready(function($) {
         $(".scroll").click(function(event) {
           event.preventDefault();
-
           $('html,body').animate({
             scrollTop: $(this.hash).offset().top
           }, 1000);
@@ -402,14 +405,13 @@ loadHeader($product['name']);
         var defaults = {
         	containerID: 'toTop', // fading element id
         	containerHoverID: 'toTopHover', // fading element hover id
-        	scrollSpeed: 1200,
-        	easingType: 'linear' 
+          scrollSpeed: 1200,
+          easingType: 'linear' 
         };
         */
         $().UItoTop({
           easingType: 'easeOutQuart'
         });
-
       });
     </script>
     <!-- //smooth-scrolling-of-move-up -->
