@@ -1,10 +1,13 @@
 <?php
-include(__DIR__ . '/../Repository/CategoryRepository.php');
+include(__DIR__ . '/../Repository/CategoryRepo.php');
+
+
+
 class CategoryService
 {
   private $categoryRepo;
 
-  public function __construct(CategoryRepository $categoryRepo)
+  public function __construct(CategoryRepo $categoryRepo)
   {
     $this->categoryRepo = $categoryRepo;
   }

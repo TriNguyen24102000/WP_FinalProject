@@ -36,5 +36,3 @@
             return $this->orderRepo->updateorder($orderDTO);
         }        
     }
-
-?>
