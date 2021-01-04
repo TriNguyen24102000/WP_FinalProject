@@ -2,27 +2,44 @@
 
     session_start();
 
-    include_once('../Exception/UserNotFoundException.php');
     include_once('../Utils/functions.php');
 
     try
     {
         $userName = $_POST['userName'];
-        $pwd = md5($_POST['password']);
+        $pwd = $_POST['password'];
 
-        echo $userName . "---" . $pwd;
 
-        if(isset($userName) && isset($pwd) && confirmAccount($userName, $pwd))
+        if(isEmpty($userName) || isEmpty($pwd))
         {
-            $role = getPermission($userName, $pwd);
-            $userRole = $role['role'];
-
-            if($userRole == 'admin')
-                header('location: adminProfile.php');
+            header('location: login.php?error=emptyField');
+            exit();
+        }
+        else
+        {
+            $hashPwd = md5($pwd);
+            if(confirmAccount($userName, $hashPwd) == false)
+            {
+                header('location: login.php?error=wrongLogin');
+                exit();
+            }
             else
-                header('location: user.php');
+            {
+                $role = getPermission($userName, $hashPwd);
+                $userRole = $role['role'];
 
-            $_SESSION['role'] = $userRole;
+                if($userRole == 'admin')
+                {
+                    $_SESSION["userID"] = $userName;
+                    header('location: adminProfile.php');
+                    exit();
+
+                }
+                else
+                    header('location: user.php');
+
+                $_SESSION['role'] = $userRole;
+            }
         }
     }
     catch(Exception $ex)

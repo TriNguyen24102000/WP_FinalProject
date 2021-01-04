@@ -8,29 +8,27 @@
 <body>
 
     <div class="container" id="container">
-        <div class="form-container sign-up-container">
-            <form action="checkSignup.php" method="GET">
-                <h1 style="padding-top: 15px"> Create Account</h1>
-                <input type="text" name="fullName" placeholder="Full Name">
-                <input type="text" name="userName" placeholder="User Name">
-                <input type="password" name="password" placeholder="Password">
-                <input type="password" name="confirmPassword" placeholder="Confirm Password">
-                <input type="email" name="email" placeholder="Email">
-                <input type="text" name="address" placeholder="Address">
-                <input type="text" name="phone" placeholder="Phone Number">
-                <input type="date" name="dob" placeholder="Date of Birth (yyyy-mm-dd)">
-                <button style="margin-top:5px"> Create Account</button>
-                <h5>Already have an account! <a class="ghost" id="signIn" style="color:blue;"><u>Sign In</u></a></h5>
-            </form>
-        </div>
+        
         <div class="form-container sign-in-container">
             <form action="checkSignin.php" method="POST">
+                
+                
                 <img src="Images/apple.webp" alt="logo" class="img-brand">
+                <?php 
+                      if(isset($_GET['error']))
+                      {
+                          if($_GET['error'] == "wrongLogin")
+                              echo "<p>Account not exist. Please check it again</p>";
+                          if($_GET['error'] == "emptyField")
+                              echo "<p>Empty User Name or Password</p>";
+                      }
+                
+                ?>
                 <input type="text" name="userName" placeholder="User Name">
                 <input type="password" name="password" placeholder="Password">
                 <a href="#" style="padding-left:150px; font-weight: bold"> Forgot Your Password?</a>
                 <button style="margin-top: 10px"> Login</button><br>
-                <h5>Don't have any account? <a class="ghost" id="signUp" style="color:blue;"><u>Sign Up</u></a></h5>
+                <h5>Don't have any account? <a class="ghost" id="signUp" href="signup.php" style="color:blue;"><u>Sign Up</u></a></h5>
             </form>
             
         </div>

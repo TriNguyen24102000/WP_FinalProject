@@ -4,7 +4,6 @@
 <!------ Include the above in your HEAD tag ---------->
 
 <?php
-
     include_once('../Service/UserService.php');
 
     $userService = new UserService(new UserRepo);
