@@ -93,4 +93,8 @@
        $stmt = Connect()->query($sql);
    }
 
+   function isEmpty($str)
+   {
+       return strlen($str) == 0;
+   }
 ?>

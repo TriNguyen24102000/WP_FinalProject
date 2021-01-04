@@ -26,7 +26,16 @@ p {
   font-weight: 100;
   line-height: 20px;
   letter-spacing: 0.5px;
-  margin: 15px 0 30px;
+  margin: 5px 0 5px;
+  display: block;
+  background-color: #de3551;
+  color: lightgray;
+  border: 1px solid black;
+  width: 100%;
+  height: 7%;
+  text-align: center;
+  padding-top: 0.3cm;
+
 }
 
 span {
@@ -82,7 +91,7 @@ input {
   background-color: #eee;
   border: none;
   padding: 12px 15px;
-  margin: 8px 0;
+  margin: 6px 0;
   width: 100%;
 }
 
@@ -208,8 +217,3 @@ input {
   height: 20%;
 }
 
-.icon-util
-{
-  width: 0.1cm;
-  height: 0.1cm;
-}
