@@ -1,11 +1,13 @@
 <?php
 
-include(__DIR__ . '/../Repository/ProductRepository.php');
+include_once(__DIR__ . '/../Repository/ProductRepo.php');
+
+
 class ProductService
 {
 	private $productRepo;
 
-	public function __construct(ProductRepository $productRepo)
+	public function __construct(ProductRepo $productRepo)
 	{
 		$this->productRepo = $productRepo;
 	}
