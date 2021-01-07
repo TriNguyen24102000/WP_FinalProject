@@ -3,13 +3,11 @@
 // for example: href="product.php?page=1&cateID=1" for the first time navigate to
 ?>
 
-
 <?php
 include_once(__DIR__ . '/Product/Service/ProductService.php');
 include_once(__DIR__ . '/Category/Service/CategoryService.php');
 include_once(__DIR__ . '/header.php');
 ?>
-
 
 <?php
 // category
@@ -49,6 +47,29 @@ $newestProducts = $productService->getNewestProducts(10);
   <link rel="stylesheet" type="text/css" href="css/jquery-ui1.css" />
   <!-- fonts -->
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet" />
+  <style>
+    .badge {
+      padding-left: 9px;
+      padding-right: 9px;
+      -webkit-border-radius: 9px;
+      -moz-border-radius: 9px;
+      border-radius: 9px;
+    }
+
+    .label-warning[href],
+    .badge-warning[href] {
+      background-color: #fffdfa;
+    }
+
+    #lblCartCount {
+      font-size: 12px;
+      background: transparent;
+      color: #fff;
+      padding: 0 5px;
+      vertical-align: top;
+      margin-left: -10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -85,7 +106,7 @@ $newestProducts = $productService->getNewestProducts(10);
   </div>
   <!-- //page -->
 
-  <!-- special offers -->
+  <!-- best selling -->
   <div class="featured-section" id="projects" style="margin-top: 20px;">
     <div class="container">
       <!-- tittle heading -->

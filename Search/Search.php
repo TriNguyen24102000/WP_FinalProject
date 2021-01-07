@@ -1,8 +1,24 @@
 <?php
 include_once(__DIR__ . '/../Product/Service/ProductService.php');
 include_once(__DIR__ . '/../Category/Service/CategoryService.php');
-include_once(__DIR__ . '/../header.php');
+// include_once(__DIR__ . '/../header.php');
+?>
 
+<?php
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start();
+}
+if (!isset($_SESSION['unpaidItems'])) {
+  $_SESSION['unpaidItems'] = array();
+}
+if (!isset($_SESSION['uid'])) {
+  $_SESSION['uid'] = '';
+}
+$cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) : 0;
+?>
+
+<?php
 // category
 $categoryRepo = new CategoryRepo();
 $categoryService = new CategoryService($categoryRepo);
@@ -18,11 +34,11 @@ $manuID = isset($_GET['manuID']) ? $_GET['manuID'] : (isset($_POST['manu-option'
 // get current page
 $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
 
-// get search content 
-$searchContent = isset($_POST['search']) ? $_POST['search'] : (isset($_GET['searchContent']) ? $_GET['searchContent'] : 'nothing');
+// get SearchContent
+$searchContent = isset($_GET['searchContent']) ? $_GET['searchContent'] : (isset($_POST['search']) ? $_POST['search'] : 'nothing');
 
 // get price
-$price = isset($_POST['price']) ? $_POST['price'] : 'no';
+$price = isset($_GET['price']) ? $_GET['price'] : (isset($_POST['price']) ? $_POST['price'] : 'no');
 $price1 = 'no';
 $price2 = 'no';
 if ($price != 'no') {
@@ -48,6 +64,8 @@ $currentPage = $currentPage < 1 ? 1 : $currentPage;
 $limit = ($currentPage - 1) * $itemPerPage;
 
 $products = $productService->getPagingSearchProducts($searchContent, $cateID, $manuID, $price1, $price2, $limit, $itemPerPage);
+
+echo $searchContent, $cateID, $manuID;
 ?>
 
 
@@ -84,11 +102,90 @@ $products = $productService->getPagingSearchProducts($searchContent, $cateID, $m
   <link rel="stylesheet" type="text/css" href="../css/jquery-ui1.css" />
   <!-- fonts -->
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet" />
+  <style>
+    .badge {
+      padding-left: 9px;
+      padding-right: 9px;
+      -webkit-border-radius: 9px;
+      -moz-border-radius: 9px;
+      border-radius: 9px;
+    }
+
+    .label-warning[href],
+    .badge-warning[href] {
+      background-color: #fffdfa;
+    }
+
+    #lblCartCount {
+      font-size: 12px;
+      background: transparent;
+      color: #fff;
+      padding: 0 5px;
+      vertical-align: top;
+      margin-left: -10px;
+    }
+  </style>
 </head>
 
 <body>
 
-
+  <!-- header-bot-->
+  <div class="header-bot">
+    <div class="header-bot_inner_wthreeinfo_header_mid">
+      <!-- header-bot-->
+      <div class="col-md-4 logo_agile">
+        <h1 style="margin-top: 30px; margin-left: -100px;">
+          <a href="../indexx.php">
+            <span>O</span>izoioi <span>M</span>art
+          </a>
+        </h1>
+      </div>
+      <!-- header-bot -->
+      <div class=" col-md-8 header">
+        <!-- header lists -->
+        <ul>
+          <li><span class="fa fa-phone" aria-hidden="true"></span>028 3915 5812</li>
+          <li>
+            <a href="#" data-toggle="modal" data-target="#myModal1">
+              <span class="fa fa-unlock-alt" aria-hidden="true"></span> Sign In
+            </a>
+          </li>
+          <li>
+            <a href="#" data-toggle="modal" data-target="#myModal2">
+              <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up
+            </a>
+          </li>
+        </ul>
+        <!-- //header lists -->
+        <!-- search -->
+        <div class="agileits_search">
+          <form action="search.php?page=1&cateID=no&manuID=no" method="post">
+            <input name="search" type="search" placeholder="Search" required="" />
+            <button type="submit" class="btn btn-default" aria-label="Left Align">
+              <span class="fa fa-search" aria-hidden="true"> </span>
+            </button>
+          </form>
+        </div>
+        <!-- //search -->
+        <!-- cart details -->
+        <div class="top_nav_right">
+          <div class="wthreecartaits wthreecartaits2 cart cart box_1">
+            <form action="#" method="post" class="last">
+              <input type="hidden" name="cmd" value="_cart" />
+              <input type="hidden" name="display" value="1" />
+              <button class="w3view-cart" style="width: 60px; height:44px;" type="submit" name="submit" value="">
+                <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                <span class='badge badge-warning' id='lblCartCount'> <?php echo $cartCount ?> </span>
+              </button>
+            </form>
+          </div>
+        </div>
+        <!-- //cart details -->
+        <div class="clearfix"></div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
 
   <!-- page -->
   <div class="services-breadcrumb">
@@ -106,10 +203,9 @@ $products = $productService->getPagingSearchProducts($searchContent, $cateID, $m
                 . '-product of '
                 . "'$searchContent'" .
                 ' (category: '
-                . ($cateID != 'no' ? $categoryService->getCategoryById($cateID)['name']
-                  . ')' : 'not set')
+                . ($cateID != 'no' ? $categoryService->getCategoryById($cateID)['name'] : 'not set')
                 . ', made by: '
-                . ($cateID != 'no' ? $productService->getManufacturerById($manuID)['name']
+                . ($manuID != 'no' ? $productService->getManufacturerById($manuID)['name']
                   . ')' : 'not set)') ?>
             </i>
             <!-- //tittle heading -->
@@ -129,7 +225,7 @@ $products = $productService->getPagingSearchProducts($searchContent, $cateID, $m
         <!-- price range -->
         <div class="range">
           <h3 class="agileits-sear-head text-center">Advance</h3>
-          <form action="Search.php?page=1&searchContent=<?php echo $searchContent ?>" method="post">
+          <form action="search.php?page=1&searchContent=<?php echo $searchContent ?>" method="post">
             <!-- price range -->
             <div class="range">
               <h4 class="agileits-sear-head">Price range</h4>
@@ -198,13 +294,13 @@ $products = $productService->getPagingSearchProducts($searchContent, $cateID, $m
               <div class="col-xs-4 product-men" style="width: 260px; height: 420px">
                 <div class="men-pro-item simpleCart_shelfItem">
                   <div class="men-thumb-item">
-                    <a href="../Product/ProductDetail.php?id=<?php echo $product['productID'] ?>">
+                    <a href="../Product/View/productDetail.php?productID=<?php echo $product['productID'] ?>">
                       <img src="../images/<?php echo $product['image'] ?>" alt="" style="width: 230px; height: 200px" />
                     </a>
                   </div>
                   <div class="item-info-product">
                     <h4 style="height: 33px;">
-                      <a href="../Product/ProductDetail.php?id=<?php echo $product['productID'] ?>">
+                      <a href="../Product/View/productDetail.php?productID=<?php echo $product['productID'] ?>">
                         <?php echo $product['name'] ?>
                       </a>
                     </h4>
@@ -212,17 +308,14 @@ $products = $productService->getPagingSearchProducts($searchContent, $cateID, $m
                       <span class="item_price">$<?php echo $product['price'] ?></span>
                     </div>
                     <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
-                      <form action="#" method="post">
+                      <form action="searchCartIncre.php" method="post">
                         <fieldset>
-                          <input type="hidden" name="cmd" value="_cart" />
-                          <input type="hidden" name="add" value="1" />
-                          <input type="hidden" name="business" value=" " />
-                          <input type="hidden" name="item_name" value="Zeeba Basmati Rice - 5 KG" />
-                          <input type="hidden" name="amount" value="950.00" />
-                          <input type="hidden" name="discount_amount" value="1.00" />
-                          <input type="hidden" name="currency_code" value="USD" />
-                          <input type="hidden" name="return" value=" " />
-                          <input type="hidden" name="cancel_return" value=" " />
+                          <input type="hidden" name="search" value="<?php echo $searchContent ?>" />
+                          <input type="hidden" name="manuID" value="<?php echo $manuID ?>" />
+                          <input type="hidden" name="cateID" value="<?php echo $cateID ?>" />
+                          <input type="hidden" name="page" value="<?php echo $currentPage ?>" />
+                          <input type="hidden" name="productID" value="<?php echo $product['productID'] ?>" />
+                          <input type="hidden" name="price" value="<?php echo $price ?>" />
                           <input type="submit" name="submit" value="Add to cart" class="button" />
                         </fieldset>
                       </form>

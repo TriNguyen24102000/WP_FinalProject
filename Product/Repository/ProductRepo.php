@@ -228,7 +228,6 @@ class ProductRepo
 
 	public function getManufacturerById($manuID)
 	{
-
 		$data = array();
 		$sql = "SELECT * FROM `manufacturer` WHERE `manuID` = '$manuID'";
 		$stmt = $this->conn->prepare($sql);

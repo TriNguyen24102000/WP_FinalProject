@@ -2,13 +2,26 @@
 // TO USE THIS PAGE
 // Transfer $productID - (productID) to the page 
 // for example: href="productDetail.php?id=1"
-?>
-
-<?php
 include_once(__DIR__ . '/../Service/ProductService.php');
 include_once(__DIR__ . '/../../Category/Service/CategoryService.php');
 // include_once(__DIR__ . '/../../header.php');
+?>
 
+<?php
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start();
+}
+if (!isset($_SESSION['unpaidItems'])) {
+  $_SESSION['unpaidItems'] = array();
+}
+if (!isset($_SESSION['uid'])) {
+  $_SESSION['uid'] = '';
+}
+$cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) : 0;
+?>
+
+<?php
 // product 
 $productRepo = new ProductRepo();
 $productService = new ProductService($productRepo);
@@ -42,6 +55,29 @@ $categories = $categoryService->getAllCategories();
   <link rel="stylesheet" type="text/css" href="../../css/jquery-ui1.css">
   <!-- fonts -->
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet">
+  <style>
+    .badge {
+      padding-left: 9px;
+      padding-right: 9px;
+      -webkit-border-radius: 9px;
+      -moz-border-radius: 9px;
+      border-radius: 9px;
+    }
+
+    .label-warning[href],
+    .badge-warning[href] {
+      background-color: #fffdfa;
+    }
+
+    #lblCartCount {
+      font-size: 12px;
+      background: transparent;
+      color: #fff;
+      padding: 0 5px;
+      vertical-align: top;
+      margin-left: -10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -90,8 +126,9 @@ $categories = $categoryService->getAllCategories();
             <form action="#" method="post" class="last">
               <input type="hidden" name="cmd" value="_cart" />
               <input type="hidden" name="display" value="1" />
-              <button class="w3view-cart" type="submit" name="submit" value="">
+              <button class="w3view-cart" style="width: 60px; height:44px;" type="submit" name="submit" value="">
                 <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                <span class='badge badge-warning' id='lblCartCount'> <?php echo $cartCount ?> </span>
               </button>
             </form>
           </div>
