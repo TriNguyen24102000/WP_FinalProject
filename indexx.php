@@ -7,7 +7,7 @@
 <?php
 include_once(__DIR__ . '/Product/Service/ProductService.php');
 include_once(__DIR__ . '/Category/Service/CategoryService.php');
-include_once(__DIR__ . '/Header/Header.php');
+include_once(__DIR__ . '/header.php');
 ?>
 
 
@@ -27,8 +27,6 @@ $productService = new ProductService($productRepo);
 
 $bestSellingProduct = $productService->getBestSellingProducts(10);
 $newestProducts = $productService->getNewestProducts(10);
-// load header
-loadHeader('Home');
 ?>
 
 
@@ -37,6 +35,7 @@ loadHeader('Home');
 
 <head>
   <!--/tags -->
+  <title>Homepage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
@@ -59,7 +58,7 @@ loadHeader('Home');
       <div class="container">
         <ul class="w3_short">
           <li>
-            <a href="index.html">Home</a>
+            <a href="indexx.php">Home</a>
             <i>|</i>
           </li>
           <li>
@@ -108,13 +107,15 @@ loadHeader('Home');
               <div class="w3l-specilamk">
                 <div class="speioffer-agile">
                   <div class="men-thumb-item">
-                    <img src="images/<?php echo $product['image'] ?>" alt="" style="width: 280px; height: 250px">
-                    <span class="product-new-top">sold: <?php echo $product['soldQuantity'] ?></span>
+                    <a href="./Product/View/productDetail.php?productID=<?php echo $product['productID'] ?>">
+                      <img src="images/<?php echo $product['image'] ?>" alt="" style="width: 280px; height: 250px">
+                      <span class="product-new-top">sold: <?php echo $product['soldQuantity'] ?></span>
+                    </a>
                   </div>
                 </div>
                 <div class="product-name-w3l">
                   <h4 style="height: 30px; font-size: 15px;">
-                    <a href="productDetail.php?id=<?php echo $product['productID'] ?>">
+                    <a href="./Product/View/productDetail.php?productID=<?php echo $product['productID'] ?>">
                       <?php echo $product['name'] ?>
                     </a>
                   </h4>
@@ -122,17 +123,9 @@ loadHeader('Home');
                     <h6>$<?php echo $product['price'] ?></h6>
                   </div>
                   <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
-                    <form action="#" method="post">
+                    <form action="indexCartIncre.php" method="post">
                       <fieldset>
-                        <input type="hidden" name="cmd" value="_cart" />
-                        <input type="hidden" name="add" value="1" />
-                        <input type="hidden" name="business" value=" " />
-                        <input type="hidden" name="item_name" value="Aashirvaad, 5g" />
-                        <input type="hidden" name="amount" value="220.00" />
-                        <input type="hidden" name="discount_amount" value="1.00" />
-                        <input type="hidden" name="currency_code" value="USD" />
-                        <input type="hidden" name="return" value=" " />
-                        <input type="hidden" name="cancel_return" value=" " />
+                        <input type="hidden" name="productID" value="<?php $product['productID'] ?>" />
                         <input type="submit" name="submit" value="Add to cart" class="button" />
                       </fieldset>
                     </form>
@@ -170,13 +163,15 @@ loadHeader('Home');
               <div class="w3l-specilamk">
                 <div class="speioffer-agile">
                   <div class="men-thumb-item" style=" position: relative; display: inline-block;">
-                    <img src="images/<?php echo $product['image'] ?>" alt="" style="width: 280px; height: 250px">
-                    <span style="position: absolute; top: -8px; right: 0;"><?php echo $product['dayCreate'] . '/' . $product['monthCreate'] . '/' . $product['yearCreate'] ?></span>
+                    <a href="./Product/View/productDetail.php?productID=<?php echo $product['productID'] ?>">
+                      <img src="images/<?php echo $product['image'] ?>" alt="" style="width: 280px; height: 250px">
+                      <span style="position: absolute; top: -8px; right: 0;"><?php echo $product['dayCreate'] . '/' . $product['monthCreate'] . '/' . $product['yearCreate'] ?></span>
+                    </a>
                   </div>
                 </div>
                 <div class="product-name-w3l">
                   <h4 style="height: 33px;">
-                    <a href="productDetail.php?id=<?php echo $product['productID'] ?>">
+                    <a href="./Product/View/productDetail.php?productID=<?php echo $product['productID'] ?>">
                       <?php echo $product['name'] ?>
                     </a>
                   </h4>
@@ -184,17 +179,9 @@ loadHeader('Home');
                     <h6>$<?php echo $product['price'] ?></h6>
                   </div>
                   <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
-                    <form action="#" method="post">
+                    <form action="indexCartIncre.php" method="post">
                       <fieldset>
-                        <input type="hidden" name="cmd" value="_cart" />
-                        <input type="hidden" name="add" value="1" />
-                        <input type="hidden" name="business" value=" " />
-                        <input type="hidden" name="item_name" value="Aashirvaad, 5g" />
-                        <input type="hidden" name="amount" value="220.00" />
-                        <input type="hidden" name="discount_amount" value="1.00" />
-                        <input type="hidden" name="currency_code" value="USD" />
-                        <input type="hidden" name="return" value=" " />
-                        <input type="hidden" name="cancel_return" value=" " />
+                        <input type="hidden" name="productID" value="<?php $product['productID'] ?>" />
                         <input type="submit" name="submit" value="Add to cart" class="button" />
                       </fieldset>
                     </form>

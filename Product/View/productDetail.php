@@ -1,28 +1,27 @@
 <?php
 // TO USE THIS PAGE
-// Transfer $id - (productID) to the page 
+// Transfer $productID - (productID) to the page 
 // for example: href="productDetail.php?id=1"
 ?>
 
 <?php
 include_once(__DIR__ . '/../Service/ProductService.php');
 include_once(__DIR__ . '/../../Category/Service/CategoryService.php');
-include_once(__DIR__ . '/../../Header/Header.php');
+// include_once(__DIR__ . '/../../header.php');
 
 // product 
 $productRepo = new ProductRepo();
 $productService = new ProductService($productRepo);
 
 // GET product
-$id = isset($_GET['id']) ?  $_GET['id'] : 1;
-$product = $productService->getProductById($id);
+$productID = isset($_GET['productID']) ?  $_GET['productID'] : 1;
+$product = $productService->getProductById($productID);
 $product['view']++;
 $productService->updateProduct($product); // update view
 
 // categories
 $categoryService = new CategoryService(new CategoryRepo());
 $categories = $categoryService->getAllCategories();
-loadHeader($product['name']);
 ?>
 
 <!DOCTYPE html>
@@ -31,6 +30,7 @@ loadHeader($product['name']);
 </html>
 
 <head>
+  <title><?php echo $product['name'] ?></title>
   <!--/tags -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -46,6 +46,63 @@ loadHeader($product['name']);
 
 <body>
 
+  <!-- header-bot-->
+  <div class="header-bot">
+    <div class="header-bot_inner_wthreeinfo_header_mid">
+      <!-- header-bot-->
+      <div class="col-md-4 logo_agile">
+        <h1 style="margin-top: 30px; margin-left: -100px;">
+          <a href="../../indexx.php">
+            <span>O</span>izoioi <span>M</span>art
+          </a>
+        </h1>
+      </div>
+      <!-- header-bot -->
+      <div class=" col-md-8 header">
+        <!-- header lists -->
+        <ul>
+          <li><span class="fa fa-phone" aria-hidden="true"></span>028 3915 5812</li>
+          <li>
+            <a href="" data-toggle="modal" data-target="#myModal1">
+              <span class="fa fa-unlock-alt" aria-hidden="true"></span> Sign In
+            </a>
+          </li>
+          <li>
+            <a href="" data-toggle="modal" data-target="#myModal2">
+              <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up
+            </a>
+          </li>
+        </ul>
+        <!-- //header lists -->
+        <!-- search -->
+        <div class="agileits_search">
+          <form action="../../Search/search.php?page=1&cateID=no&manuID=no" method="post">
+            <input name="search" type="search" placeholder="Search" required="" />
+            <button type="submit" class="btn btn-default" aria-label="Left Align">
+              <span class="fa fa-search" aria-hidden="true"> </span>
+            </button>
+          </form>
+        </div>
+        <!-- //search -->
+        <!-- cart details -->
+        <div class="top_nav_right">
+          <div class="wthreecartaits wthreecartaits2 cart cart box_1">
+            <form action="#" method="post" class="last">
+              <input type="hidden" name="cmd" value="_cart" />
+              <input type="hidden" name="display" value="1" />
+              <button class="w3view-cart" type="submit" name="submit" value="">
+                <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+        <!-- //cart details -->
+        <div class="clearfix"></div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
   <body data-new-gr-c-s-check-loaded="14.990.0" data-gr-ext-installed="">
     <!-- page -->
     <div class="services-breadcrumb">
@@ -53,11 +110,11 @@ loadHeader($product['name']);
         <div class="container">
           <ul class="w3_short">
             <li>
-              <a href="index.html">Home</a>
+              <a href="../../indexx.php">Home</a>
               <i>|</i>
             </li>
             <li>
-              <?php echo 'Category ' . $productService->getCateNameByProductId($id) ?>
+              <?php echo 'Category ' . $productService->getCateNameByProductId($productID) ?>
             </li>
           </ul>
         </div>
@@ -144,18 +201,11 @@ loadHeader($product['name']);
           </div>
           <div class="occasion-cart">
             <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
-              <form action="#" method="post">
+              <form action="../Utils/productDetailCartIncre.php" method="post">
                 <fieldset>
-                  <input type="hidden" name="cmd" value="_cart">
-                  <input type="hidden" name="add" value="1">
-                  <input type="hidden" name="business" value=" ">
-                  <input type="hidden" name="item_name" value="Zeeba Premium Basmati Rice - 5 KG">
-                  <input type="hidden" name="amount" value="951.00">
-                  <input type="hidden" name="discount_amount" value="1.00">
-                  <input type="hidden" name="currency_code" value="USD">
-                  <input type="hidden" name="return" value=" ">
-                  <input type="hidden" name="cancel_return" value=" ">
-                  <input type="submit" name="submit" value="Add to cart" class="button">
+                  <input type="hidden" name="productID" value="<?php echo $productID ?>" />
+                  <input type="hidden" name="oldProductID" value="<?php echo $productID ?>" />
+                  <input type="submit" name="submit" value="Add to cart" class="button" />
                 </fieldset>
               </form>
             </div>
@@ -189,13 +239,13 @@ loadHeader($product['name']);
               <li>
                 <div class="w3l-specilamk">
                   <div class="speioffer-agile">
-                    <a href="ProductDetail.php?id=<?php echo $relatePro['productID'] ?>">
+                    <a href="ProductDetail.php?productID=<?php echo $relatePro['productID'] ?>">
                       <img src="../../images/<?php echo $relatePro['image'] ?>" alt="" style="width: 230px; height: 200px" />
                     </a>
                   </div>
                   <div class="product-name-w3l">
                     <h4 style="height: 33px;">
-                      <a href="ProductDetail.php?id=<?php echo $relatePro['productID'] ?>">
+                      <a href="ProductDetail.php?productID=<?php echo $relatePro['productID'] ?>">
                         <?php echo $relatePro['name'] ?>
                       </a>
                     </h4>
@@ -203,17 +253,10 @@ loadHeader($product['name']);
                       <h6>$<?php echo $relatePro['price'] ?></h6>
                     </div>
                     <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
-                      <form action="#" method="post">
+                      <form action="../Utils/productDetailCartIncre.php" method="post">
                         <fieldset>
-                          <input type="hidden" name="cmd" value="_cart" />
-                          <input type="hidden" name="add" value="1" />
-                          <input type="hidden" name="business" value=" " />
-                          <input type="hidden" name="item_name" value="Aashirvaad, 5g" />
-                          <input type="hidden" name="amount" value="220.00" />
-                          <input type="hidden" name="discount_amount" value="1.00" />
-                          <input type="hidden" name="currency_code" value="USD" />
-                          <input type="hidden" name="return" value=" " />
-                          <input type="hidden" name="cancel_return" value=" " />
+                          <input type="hidden" name="productID" value="<?php echo $relatePro['productID'] ?>" />
+                          <input type="hidden" name="oldProductID" value="<?php echo $productID ?>" />
                           <input type="submit" name="submit" value="Add to cart" class="button" />
                         </fieldset>
                       </form>

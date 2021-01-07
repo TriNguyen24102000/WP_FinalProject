@@ -8,7 +8,13 @@
 <?php
 include_once(__DIR__ . '/../Service/ProductService.php');
 include_once(__DIR__ . '/../../Category/Service/CategoryService.php');
-include_once(__DIR__ . '/../../Header/Header.php');
+// include_once(__DIR__ . '/../../header.php');
+
+if (isset($_SESSION['unpaidItems'])) {
+	foreach ($_SESSION['unpaidItems'] as $id) {
+		echo $id . ' ';
+	}
+}
 ?>
 
 
@@ -21,15 +27,17 @@ $categories = $categoryService->getAllCategories();
 
 
 // get selected category
-$cateID = isset($_POST["cate-option"]) ? $_POST["cate-option"] : 1;
-$cateID = isset($_GET['cateID']) ? $_GET['cateID'] : $cateID;
+$cateID = isset($_GET['cateID']) ? $_GET['cateID'] : 1;
+$cateID = isset($_POST['cateID']) ? $_POST['cateID'] : $cateID;
+$cateID = isset($_POST["cate-option"]) ? $_POST["cate-option"] : $cateID;
 
 // get selected filter
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'no';
 $filter = isset($_POST['filter-option']) ? $_POST['filter-option'] : $filter;
 
 // get selected manufacture id
-$manuID = isset($_POST['manu-option']) ? $_POST['manu-option'] : 'no';
+$manuID = isset($_GET['manuID']) ? $_GET['manuID'] : 'no';
+$manuID = isset($_POST['manu-option']) ? $_POST['manu-option'] : $manuID;
 
 // get current page
 $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -54,9 +62,6 @@ $currentPage = $currentPage < 1 ? 1 : $currentPage;
 $limit = ($currentPage - 1) * $itemPerPage;
 
 $products = $productService->getPagingProducts($limit, $cateID, $manuID, $filter, $itemPerPage);
-
-// load header
-loadHeader($selectedCate['name']);
 ?>
 
 
@@ -67,19 +72,7 @@ loadHeader($selectedCate['name']);
 	<!--/tags -->
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script>
-		addEventListener(
-			"load",
-			function() {
-				setTimeout(hideURLbar, 0)
-			},
-			false
-		)
-
-		function hideURLbar() {
-			window.scrollTo(0, 1)
-		}
-	</script>
+	<title><?php echo $selectedCate['name'] ?></title>
 	<!--//tags -->
 	<link href="../../css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="../../css/style.css" rel="stylesheet" type="text/css" media="all" />
@@ -94,13 +87,72 @@ loadHeader($selectedCate['name']);
 </head>
 
 <body>
+
+	<!-- header-bot-->
+	<div class="header-bot">
+		<div class="header-bot_inner_wthreeinfo_header_mid">
+			<!-- header-bot-->
+			<div class="col-md-4 logo_agile">
+				<h1 style="margin-top: 30px; margin-left: -100px;">
+					<a href="../../indexx.php">
+						<span>O</span>izoioi <span>M</span>art
+					</a>
+				</h1>
+			</div>
+			<!-- header-bot -->
+			<div class=" col-md-8 header">
+				<!-- header lists -->
+				<ul>
+					<li><span class="fa fa-phone" aria-hidden="true"></span>028 3915 5812</li>
+					<li>
+						<a href="" data-toggle="modal" data-target="#myModal1">
+							<span class="fa fa-unlock-alt" aria-hidden="true"></span> Sign In
+						</a>
+					</li>
+					<li>
+						<a href="" data-toggle="modal" data-target="#myModal2">
+							<span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up
+						</a>
+					</li>
+				</ul>
+				<!-- //header lists -->
+				<!-- search -->
+				<div class="agileits_search">
+					<form action="../../Search/search.php?page=1&cateID=no&manuID=no" method="post">
+						<input name="search" type="search" placeholder="Search" required="" />
+						<button type="submit" class="btn btn-default" aria-label="Left Align">
+							<span class="fa fa-search" aria-hidden="true"> </span>
+						</button>
+					</form>
+				</div>
+				<!-- //search -->
+				<!-- cart details -->
+				<div class="top_nav_right">
+					<div class="wthreecartaits wthreecartaits2 cart cart box_1">
+						<form action="#" method="post" class="last">
+							<input type="hidden" name="cmd" value="_cart" />
+							<input type="hidden" name="display" value="1" />
+							<button class="w3view-cart" type="submit" name="submit" value="">
+								<i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+							</button>
+						</form>
+					</div>
+				</div>
+				<!-- //cart details -->
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+
 	<!-- page -->
 	<div class="services-breadcrumb">
 		<div class="agile_inner_breadcrumb">
 			<div class="container">
 				<ul class="w3_short">
 					<li>
-						<a href="index.html">Home</a>
+						<a href="../../indexx.php">Home</a>
 						<i>|</i>
 					</li>
 					<li>
@@ -169,7 +221,7 @@ loadHeader($selectedCate['name']);
 				<div class="range">
 					<h3 class="agileits-sear-head">Filter</h3>
 					<div>
-						<form action="product.php?page=<?php echo $currentPage ?>&cateID=<?php echo $cateID ?>" method="POST">
+						<form action="product.php?page=<?php echo $currentPage ?>&cateID=<?php echo $cateID ?>&manuID=<?php echo  $manuID ?>" method="POST">
 							<select id="agileinfo-nav_search" name="filter-option" onChange="this.form.submit()">
 								<option <?php
 												echo (strval($filter) == "no" ? "selected" : "") ?> value="no">No</option>
@@ -197,30 +249,26 @@ loadHeader($selectedCate['name']);
 							<div class="col-xs-4 product-men" style="width: 260px; height: 420px">
 								<div class="men-pro-item simpleCart_shelfItem">
 									<div class="men-thumb-item">
-										<a href="productDetail.php?id=<?php echo $product['productID'] ?>">
+										<a href="productDetail.php?productID=<?php echo $product['productID'] ?>">
 											<img src="../../images/<?php echo $product['image'] ?>" alt="" style="width: 230px; height: 200px" />
 										</a>
 									</div>
 									<div class="item-info-product">
 										<h4 style="height: 33px;">
-											<a href="productDetail.php?id=<?php echo $product['productID'] ?>"><?php echo $product['name'] ?>
+											<a href="productDetail.php?productID=<?php echo $product['productID'] ?>"><?php echo $product['name'] ?>
 											</a>
 										</h4>
 										<div class="info-product-price">
 											<span class="item_price">$<?php echo $product['price'] ?></span>
 										</div>
 										<div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
-											<form action="#" method="post">
+											<form action="../Utils/productCartIncre.php" method="post">
 												<fieldset>
-													<input type="hidden" name="cmd" value="_cart" />
-													<input type="hidden" name="add" value="1" />
-													<input type="hidden" name="business" value=" " />
-													<input type="hidden" name="item_name" value="Zeeba Basmati Rice - 5 KG" />
-													<input type="hidden" name="amount" value="950.00" />
-													<input type="hidden" name="discount_amount" value="1.00" />
-													<input type="hidden" name="currency_code" value="USD" />
-													<input type="hidden" name="return" value=" " />
-													<input type="hidden" name="cancel_return" value=" " />
+													<input type="hidden" name="productID" value="<?php echo $product['productID'] ?>" />
+													<input type="hidden" name="page" value="<?php echo $currentPage ?>" />
+													<input type="hidden" name="cateID" value="<?php echo $cateID ?>" />
+													<input type="hidden" name="manuID" value="<?php echo $manuID ?>" />
+													<input type="hidden" name="filter" value="<?php echo $filter ?>" />
 													<input type="submit" name="submit" value="Add to cart" class="button" />
 												</fieldset>
 											</form>
@@ -315,13 +363,13 @@ loadHeader($selectedCate['name']);
 						<li>
 							<div class="w3l-specilamk">
 								<div class="speioffer-agile">
-									<a href="productDetail.php?id=<?php echo $relatedPro['productID'] ?>">
+									<a href="productDetail.php?productID=<?php echo $relatedPro['productID'] ?>">
 										<img src="../../images/<?php echo $relatedPro['image'] ?>" alt="" style="width: 230px; height: 200px" />
 									</a>
 								</div>
 								<div class="product-name-w3l">
 									<h4 style="height: 33px;">
-										<a href="productDetail.php?id=<?php echo $relatedPro['productID'] ?>">
+										<a href="productDetail.php?productID=<?php echo $relatedPro['productID'] ?>">
 											<?php echo $relatedPro['name'] ?>
 										</a>
 									</h4>
@@ -329,17 +377,13 @@ loadHeader($selectedCate['name']);
 										<h6>$<?php echo $relatedPro['price'] ?></h6>
 									</div>
 									<div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
-										<form action="#" method="post">
+										<form action="../Utils/productCartIncre.php" method="post">
 											<fieldset>
-												<input type="hidden" name="cmd" value="_cart" />
-												<input type="hidden" name="add" value="1" />
-												<input type="hidden" name="business" value=" " />
-												<input type="hidden" name="item_name" value="Aashirvaad, 5g" />
-												<input type="hidden" name="amount" value="220.00" />
-												<input type="hidden" name="discount_amount" value="1.00" />
-												<input type="hidden" name="currency_code" value="USD" />
-												<input type="hidden" name="return" value=" " />
-												<input type="hidden" name="cancel_return" value=" " />
+												<input type="hidden" name="productID" value="<?php echo $product['productID'] ?>" />
+												<input type="hidden" name="page" value="<?php echo $currentPage ?>" />
+												<input type="hidden" name="cateID" value="<?php echo $cateID ?>" />
+												<input type="hidden" name="manuID" value="<?php echo $manuID ?>" />
+												<input type="hidden" name="filter" value="<?php echo $filter ?>" />
 												<input type="submit" name="submit" value="Add to cart" class="button" />
 											</fieldset>
 										</form>

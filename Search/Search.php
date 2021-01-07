@@ -1,13 +1,10 @@
 <?php
-include_once('../Product/Service/ProductService.php');
-include('../Category/Service/CategoryService.php');
-include('../Product/Helper/Helper.php');
-include('../Header/Header.php');
-
-$db = Connect();
+include_once(__DIR__ . '/../Product/Service/ProductService.php');
+include_once(__DIR__ . '/../Category/Service/CategoryService.php');
+include_once(__DIR__ . '/../header.php');
 
 // category
-$categoryRepo = new CategoryRepository($db);
+$categoryRepo = new CategoryRepo();
 $categoryService = new CategoryService($categoryRepo);
 // get all categories
 $categories = $categoryService->getAllCategories();
@@ -35,7 +32,7 @@ if ($price != 'no') {
 }
 
 // product
-$productRepo = new ProductRepository($db);
+$productRepo = new ProductRepo();
 $productService = new ProductService($productRepo);
 
 // manufactures
@@ -51,10 +48,6 @@ $currentPage = $currentPage < 1 ? 1 : $currentPage;
 $limit = ($currentPage - 1) * $itemPerPage;
 
 $products = $productService->getPagingSearchProducts($searchContent, $cateID, $manuID, $price1, $price2, $limit, $itemPerPage);
-
-
-// load header
-loadHeader('Search results');
 ?>
 
 
@@ -64,6 +57,7 @@ loadHeader('Search results');
 
 <head>
   <!--/tags -->
+  <title>Search Results</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <script>
@@ -102,7 +96,7 @@ loadHeader('Search results');
       <div class="container">
         <ul class="w3_short">
           <li>
-            <a href="index.html">Home</a>
+            <a href="../indexx.php">Home</a>
             <i>|</i>
             <!-- tittle heading -->
             <i style="margin-top: 10px; margin-bottom: 10px; ">
