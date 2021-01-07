@@ -1,4 +1,12 @@
 <?php
+
+if(isset($SESSION['uid']))
+{
+  echo '<script>alert("Ban chua dang nhap");</script>';
+  exit();
+}
+  
+
 function loadHeader($title)
 {
   echo ('
