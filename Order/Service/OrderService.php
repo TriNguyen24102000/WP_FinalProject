@@ -21,9 +21,9 @@ class OrderService
         return $this->orderRepo->getOrderByID($id);
     }
 
-    public function insertOrder(OrderDTO $orderDTO)
+    public function insertOrder($userID, $totalPrice = 0)
     {
-        return $this->orderRepo->insertOrderToDB($orderDTO);
+        return $this->orderRepo->insertOrderToDB($userID, $totalPrice);
     }
 
     public function deleteOrder($id)
@@ -41,8 +41,13 @@ class OrderService
         return $this->orderRepo->getLastOrderID();
     }
 
-    public function insertOrderDetail($orderID, $productID, $quantity)
+    public function insertOrderDetail($orderID, $productID, $quantity, $purPrice)
     {
-        return $this->orderRepo->insertOrderDetail($orderID, $productID, $quantity);
+        return $this->orderRepo->insertOrderDetail($orderID, $productID, $quantity, $purPrice);
+    }
+
+    public function updateOrderTotalPrice($orderID, $totalPrice)
+    {
+        return $this->orderRepo->updateOrderTotalPrice($orderID, $totalPrice);
     }
 }

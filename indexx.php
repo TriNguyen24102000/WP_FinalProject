@@ -10,7 +10,7 @@ include(__DIR__ . '/header.php');
 ?>
 
 <?php
-// category
+// category service
 $categoryRepo = new CategoryRepo();
 $categoryService = new CategoryService($categoryRepo);
 // get all categories
@@ -19,7 +19,7 @@ $categories = $categoryService->getAllCategories();
 // get current page
 $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
 
-// product
+// product service
 $productRepo = new ProductRepo();
 $productService = new ProductService($productRepo);
 
@@ -36,15 +36,9 @@ $newestProducts = $productService->getNewestProducts(10);
   <title>Homepage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
   <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
   <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
   <link href="css/font-awesome.css" rel="stylesheet" />
-  <!--pop-up-box-->
-  <link href="css/popuo-box.css" rel="stylesheet" type="text/css" media="all" />
-  <!--//pop-up-box-->
-  <!-- price range -->
-  <link rel="stylesheet" type="text/css" href="css/jquery-ui1.css" />
   <!-- fonts -->
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet" />
   <style>

@@ -4,29 +4,35 @@
 // for example: href="productDetail.php?id=1"
 include_once(__DIR__ . '/../Service/ProductService.php');
 include_once(__DIR__ . '/../../Category/Service/CategoryService.php');
+include_once(__DIR__ . '/../../User/Service/UserService.php');
+
 // include_once(__DIR__ . '/../../header.php');
 ?>
 
 <?php
-
+// session start
 if (session_status() !== PHP_SESSION_ACTIVE) {
   session_start();
 }
+
+// unpaid Items
 if (!isset($_SESSION['unpaidItems'])) {
   $_SESSION['unpaidItems'] = array();
+  $_SESSION['unpaidItems']['count'] = 0;
 }
-if (!isset($_SESSION['uid'])) {
-  $_SESSION['uid'] = '';
-}
-$cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) : 0;
+
+// current userID
+$userID = isset($_SESSION['uid']) ? $_SESSION['uid'] : '-1';
+
+$cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) - 1 : 0;
 ?>
 
 <?php
-// product 
+// product service
 $productRepo = new ProductRepo();
 $productService = new ProductService($productRepo);
 
-// GET product
+// get product
 $productID = isset($_GET['productID']) ?  $_GET['productID'] : 1;
 $product = $productService->getProductById($productID);
 $product['view']++;
@@ -99,12 +105,26 @@ $categories = $categoryService->getAllCategories();
         <ul>
           <li><span class="fa fa-phone" aria-hidden="true"></span>028 3915 5812</li>
           <li>
-            <a href="" data-toggle="modal" data-target="#myModal1">
-              <span class="fa fa-unlock-alt" aria-hidden="true"></span> Sign In
-            </a>
+            <?php
+            if ($userID == '-1') {
+            ?>
+              <a href="../../User/Views/login.php">
+                <span class="fas fa-user-circle" aria-hidden="true"></span> Sign In
+              </a>
+            <?php
+            } else {
+              $userService = new UserService(new UserRepo());
+              $user = $userService->getUserByID($userID);
+            ?>
+              <a href="../../User/Views/userDetail.php">
+                <span class="fa fa-user-o" aria-hidden="true"></span> <?php echo $user['username'] ?>
+              </a>
+            <?php
+            }
+            ?>
           </li>
           <li>
-            <a href="" data-toggle="modal" data-target="#myModal2">
+            <a href="../../User/Views/signup.php">
               <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up
             </a>
           </li>
@@ -123,7 +143,7 @@ $categories = $categoryService->getAllCategories();
         <!-- cart details -->
         <div class="top_nav_right">
           <div class="wthreecartaits wthreecartaits2 cart cart box_1">
-            <form action="#" method="post" class="last">
+            <form action="../../Order/Views/user_listOrder.php" method="post" class="last">
               <input type="hidden" name="cmd" value="_cart" />
               <input type="hidden" name="display" value="1" />
               <button class="w3view-cart" style="width: 60px; height:44px;" type="submit" name="submit" value="">

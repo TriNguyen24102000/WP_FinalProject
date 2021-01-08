@@ -34,12 +34,8 @@
         </div>
         <div class="overlay-container">
             <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <img src="Images/loginWP.jpg" id="img-display" alt="movie-1" height="500" width="500"/>
-                    
-                </div>
                 <div class="overlay-panel overlay-right">
-                    <img src="Images/signup.jpg" id="img-display" alt="movie-2" height="500" width="500"/>
+                    <img src="Images/signup.jpg" style="object-fit: cover;" id="img-display" alt="movie-2" height="500" width="500"/>
                 </div>
             </div>
         </div>

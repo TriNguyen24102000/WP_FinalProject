@@ -5,30 +5,10 @@ include_once(__DIR__ . '/../../Product/Service/ProductService.php');
 include_once(__DIR__ . '/../../User/Service/UserService.php');
 include_once(__DIR__ . '/../Service/OrderService.php');
 
+// session start
 if (session_status() == PHP_SESSION_NONE) {
 	session_start();
 }
-
-$_SESSION['uid'] = '2';
-$userID = $_SESSION['uid'];
-if (isset($_GET['act'])) {
-	if (!isset($userID)) {
-		echo '<script> alert("Please login before make a payment"); </script>';
-	} else if ($userID === '-1') {
-		echo '<script> alert("Please login before make a payment"); </script>';
-	} else {
-		$orderDTO = new OrderDTO(0, $userID);
-		$orderService = new OrderService(new OrderRepo());
-		$orderService->insertorder($orderDTO);
-
-		$order = $orderService->getLastOrder();
-		echo 'login';
-	}
-}
-
-// category service
-$categoryService = new CategoryService(new CategoryRepo());
-$categories = $categoryService->getAllCategories();
 
 // unpaidItems
 $orderItems = null;
@@ -36,45 +16,77 @@ if (isset($_SESSION['unpaidItems'])) {
 	if (isset($_POST['delProductID'])) {
 		unset($_SESSION['unpaidItems'][$_POST['delProductID']]);
 	}
+	// set unpaindItems
 	$orderItems = $_SESSION['unpaidItems'];
+
+	// userID
+	$userID = isset($_SESSION['uid']) ? $_SESSION['uid'] : '-1';
+
+	// product service
+	$productService = new ProductService(new ProductRepo());
+
+	// check out
+	if (isset($_GET['act'])) {
+		if ($userID === '-1') {
+			echo '<script> alert("Please login before make a payment"); </script>';
+		} else {
+			if (count($orderItems) > 0) {
+				$orderService = new OrderService(new OrderRepo());
+				// insert order with totalPrice = 0
+				$orderService->insertOrder($userID, $total = 0);
+				// get last inserted order
+				$lastOrderID = $orderService->getLastOrder()['orderID'];
+				// insert order_detail
+				if ($orderItems != null) {
+					$totalPrice = 0;
+					foreach ($orderItems as $productID => $quantity) {
+						if ($productID == 'count') {
+							continue;
+						}
+						$pricePerItem = $productService->getProductById($productID)['price'];
+						$purPrice = $orderService->insertOrderDetail(
+							$lastOrderID,
+							$productID,
+							$quantity,
+							($quantity * $pricePerItem)
+						);
+						$totalPrice += $quantity * $pricePerItem;
+					}
+					//update totalPrice
+					$orderService->updateOrderTotalPrice($lastOrderID, $totalPrice);
+					// reset cart
+					$_SESSION['unpaidItems'] = array();
+					$_SESSION['unpaidItems']['count'] = 0;
+					// alert
+					echo '<script> alert("Ordered!"); </script>';
+					header('location: user_listOrder.php');
+				}
+			}
+		}
+	}
+	// category service
+	$categoryService = new CategoryService(new CategoryRepo());
+	$categories = $categoryService->getAllCategories();
 }
 
-// product service
-$productService = new ProductService(new ProductRepo());
 ?>
 
 <!DOCTYPE html>
 <html lang="zxx">
 
 <head>
-	<title>Order</title>
+	<title>Checkout</title>
 	<!--/tags -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script>
-		addEventListener("load", function() {
-			setTimeout(hideURLbar, 0);
-		}, false);
-
-		function hideURLbar() {
-			window.scrollTo(0, 1);
-		}
-	</script>
-	<!--//tags -->
 	<link href="../../css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="../../css/style.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="../../css/font-awesome.css" rel="stylesheet">
-	<!--pop-up-box-->
-	<link href="../../css/popuo-box.css" rel="stylesheet" type="text/css" media="all" />
-	<!--//pop-up-box-->
-	<!-- price range -->
-	<link rel="stylesheet" type="text/css" href="../../css/jquery-ui1.css">
 	<!-- fonts -->
 	<link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet">
 </head>
 
 <body>
-
 	<!-- header-bot-->
 	<div class="header-bot">
 		<div class="header-bot_inner_wthreeinfo_header_mid">
@@ -93,11 +105,10 @@ $productService = new ProductService(new ProductRepo());
 					<li><span class="fa fa-phone" aria-hidden="true"></span>028 3915 5812</li>
 					<li>
 						<?php
-						if (!isset($userID) || $userID == '-1') {
-
+						if ($userID == '-1') {
 						?>
 							<a href="../../User/Views/login.php">
-								<span class="fa fa-unlock-alt" aria-hidden="true"></span> Sign In
+								<span class="fas fa-user-circle" aria-hidden="true"></span> Sign In
 							</a>
 						<?php
 						} else {
@@ -112,13 +123,12 @@ $productService = new ProductService(new ProductRepo());
 						?>
 					</li>
 					<li>
-						<a href="#" data-toggle="modal" data-target="#myModal2">
+						<a href="../../User/Views/signup.php">
 							<span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up
 						</a>
 					</li>
 				</ul>
 				<!-- //header lists -->
-
 				<div class="clearfix"></div>
 			</div>
 			<div class="clearfix"></div>
@@ -140,6 +150,7 @@ $productService = new ProductService(new ProductRepo());
 		</div>
 	</div>
 	<!-- //page -->
+
 	<!-- checkout page -->
 	<div class="privacy">
 		<div class="container">
@@ -186,44 +197,41 @@ $productService = new ProductService(new ProductRepo());
 									$product = $productService->getProductById($productID);
 									$total += $product['price'] * $quantity;
 								?>
-									<form action="#" id="form1">
-										<tr class="rem<?php echo $idx ?>">
-											<td class="invert"><?php echo $idx ?></td>
-											<td class="invert-image">
-												<a href="../../Product/View/productDetail.php?productID=<?php echo $productID ?>">
-													<img src="../../images/<?php echo $product['image'] ?>" alt=" " style="width: 50px; height:50px;" class="img-responsive">
-												</a>
-											</td>
-											<td class="invert">
-												<div class="quantity">
-													<div class="quantity-select">
-														<div class="entry value-minus" name="quantity<?php echo $idx ?>">&nbsp;</div>
-														<div class="entry value">
-															<span name="quantity"><?php echo $quantity ?></span>
-														</div>
-														<div class="entry value-plus active" name="quantity<?php echo $idx ?>">&nbsp;</div>
+									<tr class="rem<?php echo $idx ?>">
+										<td class="invert"><?php echo $idx ?></td>
+										<td class="invert-image">
+											<a href="../../Product/View/productDetail.php?productID=<?php echo $productID ?>">
+												<img src="../../images/<?php echo $product['image'] ?>" alt=" " style="width: 50px; height:50px;" class="img-responsive">
+											</a>
+										</td>
+										<td class="invert">
+											<div class="quantity">
+												<div class="quantity-select">
+													<div class="entry value-minus" name="quantity<?php echo $idx ?>">&nbsp;</div>
+													<div class="entry value">
+														<span name="quantity"><?php echo $quantity ?></span>
 													</div>
+													<div class="entry value-plus active" name="quantity<?php echo $idx ?>">&nbsp;</div>
 												</div>
-											</td>
-											<td class="invert" name="name<?php echo $idx ?>" id="<?php echo $productID ?>"><?php echo $product['name'] ?></td>
-											<td class="invert" name="price<?php echo $idx ?>"><?php echo $product['price'] * $quantity ?></td>
-											<td class="invert">
-												<div class="rem">
-													<form action="user_listOrder.php" method="POST">
-														<input type="hidden" name="delProductID" value="<?php echo $productID ?>">
-														<input type="submit" name="submit" value="X" class="button" />
-													</form>
-												</div>
-											</td>
-										</tr>
-									<?php
+											</div>
+										</td>
+										<td class="invert" name="name<?php echo $idx ?>" id="<?php echo $productID ?>"><?php echo $product['name'] ?></td>
+										<td class="invert" name="price<?php echo $idx ?>"><?php echo $product['price'] * $quantity ?></td>
+										<td class="invert">
+											<div class="rem">
+												<form action="user_listOrder.php" method="POST">
+													<input type="hidden" name="delProductID" value="<?php echo $productID ?>">
+													<input type="submit" name="submit" value="X" class="button" />
+												</form>
+											</div>
+										</td>
+									</tr>
+								<?php
 									$idx++;
 								} ?>
-									</form>
 							</tbody>
 						</table>
 					</div>
-
 			</div>
 			<div class="checkout-left" style="text-align: right;">
 				<div class="address_form_agile">
@@ -234,7 +242,7 @@ $productService = new ProductService(new ProductRepo());
 						</a>
 					</div>
 				</div>
-				<div class="clearfix"> </div>
+				<div class="clearfix"></div>
 			<?php
 				}
 			?>

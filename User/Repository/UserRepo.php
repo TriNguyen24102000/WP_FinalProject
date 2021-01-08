@@ -34,7 +34,7 @@ class UserRepo
         //insert normal user -> role ID = 1;
 
 
-        $sql = "INSERT INTO `user`(`userID`, `username`, `password`, `fullName`, `dob`, `address`, `phone`, `createAt`, `email`, `updateAt`, `roleID`) VALUES (:userID, :username, :pwd, :fullname, :dob, :addr, :phone, :createAt, :email, :updateAt, 2)";
+        $sql = "INSERT INTO `user`(`userID`, `username`, `password`, `name`, `dob`, `address`, `phone`, `createAt`, `email`, `updateAt`, `roleID`) VALUES (:userID, :username, :pwd, :fullname, :dob, :addr, :phone, :createAt, :email, :updateAt, 2)";
         $stmt = Connect()->prepare($sql);
 
         $stmt->bindValue(':userID', $userDTO->userID);

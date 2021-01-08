@@ -1,6 +1,6 @@
 <?php
 
-include('Service/UserService.php');
+include(__DIR__ . '/Service/UserService.php');
 
 $userService = new UserService(new UserRepo);
 $data = $userService->getAllUsers();

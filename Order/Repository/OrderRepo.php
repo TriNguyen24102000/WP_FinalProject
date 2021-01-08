@@ -43,24 +43,22 @@ class OrderRepo
 
 	public function getLastOrderID()
 	{
-		$sql = "SELECT `ordID` FROM `order` ORDER BY `ordID` DESC LIMIT 1";
+		$sql = "SELECT `orderID` FROM `order` ORDER BY `orderID` DESC LIMIT 1";
 		$stmt = $this->conn->query($sql);
 
 		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 
-	public function insertOrderToDB(OrderDTO $orderDTO)
+	public function insertOrderToDB($userID, $totalPrice)
 	{
-		//insert normal user -> role ID = 1;
-		$order = $this->getLastOrderID();
-		$nextOrderID = $order['ordID'] + 1;
-		$sql = "INSERT INTO `order`(`orderID`, `userID`, `createAt`, `totalPrice`, `updateAt`) VALUES ($nextOrderID, :userID, :totalPrice, :createAt, :updateAt)";
+		$orderID = $this->getLastOrderID()['orderID'] + 1;
+		$sql = "INSERT INTO `order`(`orderID`, `userID`, `totalPrice`) 
+		VALUES (:orderID, :userID, :totalPrice)";
 
 		$stmt = 	$this->conn->prepare($sql);
-		$stmt->bindValue(':userID', $orderDTO->userID);      //combobox
-		$stmt->bindValue(':addr', $orderDTO->totalPrice);
-		$stmt->bindValue(':createAt', $orderDTO->createAt);
-		$stmt->bindValue(':updateAt', $orderDTO->updateAt);
+		$stmt->bindValue(':userID', $userID);
+		$stmt->bindValue(':orderID', $orderID);
+		$stmt->bindValue(':totalPrice', $totalPrice);
 
 		$stmt->execute();
 
@@ -105,10 +103,16 @@ class OrderRepo
 	}
 
 
-	public function insertOrderDetail($orderID, $productID, $quantity)
+	public function insertOrderDetail($orderID, $productID, $quantity, $purPrice)
 	{
-		$sql = "INSERT INTO `order_detail` (`orderID`, `productID`, `quantity`)
-		VALUES('$orderID', '$productID', '$quantity')";
+		$sql = "INSERT INTO `order_detail` (`orderID`, `productID`, `saleQuantity`, `purPrice`)
+		VALUES('$orderID', '$productID', '$quantity', '$purPrice')";
+		$this->conn->query($sql);
+	}
+
+	public function updateOrderTotalPrice($orderID, $totalPrice)
+	{
+		$sql = "UPDATE `order` SET `totalPrice`= $totalPrice WHERE `orderID` = $orderID";
 		$this->conn->query($sql);
 	}
 }

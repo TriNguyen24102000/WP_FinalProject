@@ -5,14 +5,17 @@
     $userName = $_POST['userName'];
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirmPassword'];
-    $fullName = $_POST['fullName'];
+    $name = $_POST['name'];
     $email = $_POST['email'];
-    $dob = $_POST['dob'];
+    $dob_day = $_POST['dob_day'];
+    $dob_month = $_POST['dob_month'];
+    $dob_year = $_POST['dob_year'];
     $address = $_POST['address'];
     $phone = $_POST['phone'];
 
-    if(isCorrectSignupFormat($userName, $password, $fullName, $email, $address, $dob, $phone) == false 
-            && isEmpty($userName) || isEmpty($password) || isEmpty($confirmPassword) || isEmpty($fullName) || isEmpty($email) || isEmpty(($dob)
+    $dob = $dob_year . "-" . $dob_month . "-" . $dob_day;
+    if(isCorrectSignupFormat($userName, $password, $name, $email, $address, $dob, $phone) == false 
+            && isEmpty($userName) || isEmpty($password) || isEmpty($confirmPassword) || isEmpty($name) || isEmpty($email) || isEmpty(($dob)
             || isEmpty($address) || isEmpty($phone)))
     {
         header('location: signup.php?error=signupeemptyField');
@@ -43,18 +46,17 @@
                 $updateAt = date("Y-m-d H:i:s");
         
         
-                $user = new UserDTO($nextUserID, $userName, $fullName, md5($password), $email,  $dob, $phone, $address, $createAt, 
+                $user = new UserDTO($nextUserID, $userName, $name, md5($password), $email,  $dob, $phone, $address, $createAt, 
                                             $updateAt);
         
                 $result = $userService->insertUser($user);
         
                 if($result > 0)
                 {
-                    echo "<script>Create Account Success!!</script>";
-                    header('location: login.php');
+                    header('location: signup.php?success=createSuccess');
                 }
                 else
-                    echo "<script>Create Account Fail!!</script>";
+                    header('location: signup.php?error=createAccountFailed');
             }
         }
     }

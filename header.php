@@ -1,16 +1,26 @@
 <?php
+include_once(__DIR__ . '/User/Service/UserService.php');
+
+// session start
 if (session_status() !== PHP_SESSION_ACTIVE) {
   session_start();
 }
+
+// init unpaidItems
 if (!isset($_SESSION['unpaidItems'])) {
   $_SESSION['unpaidItems'] = array();
   $_SESSION['unpaidItems']['count'] = 0;
 }
 
+// init userID default
 if (!isset($_SESSION['uid'])) {
   $_SESSION['uid'] = '-1';
 }
-$cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) : 0;
+// current userID
+$userID = isset($_SESSION['uid']) ? $_SESSION['uid'] : '-1';
+
+// number of products in cart
+$cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) - 1 : 0;
 ?>
 
 <!DOCTYPE html>
@@ -37,11 +47,6 @@ $cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) :
   <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
   <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
   <link href="css/font-awesome.css" rel="stylesheet" />
-  <!--pop-up-box-->
-  <link href="css/popuo-box.css" rel="stylesheet" type="text/css" media="all" />
-  <!--//pop-up-box-->
-  <!-- price range -->
-  <link rel="stylesheet" type="text/css" href="css/jquery-ui1.css" />
   <!-- fonts -->
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet" />
   <style>
@@ -87,12 +92,26 @@ $cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) :
         <ul>
           <li><span class="fa fa-phone" aria-hidden="true"></span>028 3915 5812</li>
           <li>
-            <a href="#" data-toggle="modal" data-target="#myModal1">
-              <span class="fa fa-unlock-alt" aria-hidden="true"></span> Sign In
-            </a>
+            <?php
+            if ($userID == '-1') {
+            ?>
+              <a href="User/Views/login.php">
+                <span class="fas fa-user-circle" aria-hidden="true"></span> Sign In
+              </a>
+            <?php
+            } else {
+              $userService = new UserService(new UserRepo());
+              $user = $userService->getUserByID($userID);
+            ?>
+              <a href="User/Views/userDetail.php">
+                <span class="fa fa-user-o" aria-hidden="true"></span> <?php echo $user['username'] ?>
+              </a>
+            <?php
+            }
+            ?>
           </li>
           <li>
-            <a href="#" data-toggle="modal" data-target="#myModal2">
+            <a href="User/Views/signup.php">
               <span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up
             </a>
           </li>
