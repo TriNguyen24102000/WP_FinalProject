@@ -8,19 +8,16 @@
 
     if(isset($action))
     {
-        if($action == "addUser")
-        {
-
-        }
         if($action == "deleteUser")
         {
             $userService->deleteUser($userIDChoosen);
-            header('location: adminProfile.php?success=deleteSuccess');
+            header('location: adminProfile.php?deleteStatus=true');
             exit();
         }
         if($action == "updateUser")
         {
             header("location: updateForm.php?uid=$userIDChoosen");
+            exit();
         }
     }
 ?>

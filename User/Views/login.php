@@ -34,7 +34,6 @@
         </div>
         <div class="overlay-container">
             <div class="overlay">
-
                 <div class="overlay-panel overlay-right">
                     <img src="Images/signup.jpg" style="object-fit: cover;" id="img-display" alt="movie-2" height="500" width="500"/>
                 </div>

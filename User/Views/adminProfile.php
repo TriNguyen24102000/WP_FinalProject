@@ -1,4 +1,3 @@
-
 <?php
 
     //include_once('/Applications/XAMPP/xamppfiles/htdocs/WP_FinalProject/header.php');
@@ -6,17 +5,26 @@
 ?>
 
 <?php
-										  
-	if(isset($_GET['success']))
+								
+	if(isset($_GET['error']))
 	{
-		if($_GET['success'] == "deleteSuccess");
+		if($_GET['error'] == "updateFail")
+			echo "<script>alert('Update Failed');</script>";
+	}
+	if(isset($_GET['deleteStatus']))
+	{
+		if($_GET['deleteStatus'] == "true");
 			echo "<script>alert('Delete Success');</script>";
+	}
+	if(isset($_GET['updateStatus']))
+	{
+		if($_GET['updateStatus'] == "true");
+			echo "<script>alert('Update Success');</script>";
 	}
 									 
 ?>
 
 <?php
-
 
     session_start();
     include_once('../Service/UserService.php');
@@ -27,7 +35,6 @@
     $index = 1;
 
 ?>
-
 
 
 <!DOCTYPE html>
@@ -67,36 +74,38 @@
 							</div>
 						</div>
 		  				<div class="panel-body">
-						  
-						  <td><a  href="action.php?action=addUser" style="margin: 10px 0px 10px 25cm;"><img class="icon-util" src="Images/plus.png" alt="Update"></a></td>
-
 		  					<table class="table">
 				              <thead>
 				                <tr>
 				                  <th>Number</th>
 				                  <th>User Name</th>
-				                  <th>Password</th>
+								  <th>Password</th>
+								  <th>Day of Birth</th>
 				                  <th>Full Name</th>
 				                  <th>Address</th>
 				                  <th>Phone</th>
 				                </tr>
 				              </thead>
 				              <tbody>
+
+									  
                                     <?php foreach($data as $user): ?>
                                         <?php if($user['roleID'] != 1) 
                                               {
+												$orgDate = $user['dob'];  
+												$newDate = date("d-m-Y", strtotime($orgDate));  
                                         ?>  
                                             <tr>
                                                 <td><?php echo $index++;?></td>
                                                 <td><?php echo $user['username'];?></td>
-                                                <td><?php echo $user['password'];?></td>
+												<td><?php echo $user['password'];?></td>
+												<td><?php echo $newDate; ?></td>
                                                 <td><?php echo $user['name'];?></td>
                                                 <td><?php echo $user['address'];?></td>
                                                 <td><?php echo $user['phone'];?></td>
                                                 
                                                 <td><a href="action.php?action=deleteUser&uid=<?php echo $user['userID']; ?>"><img class="icon-util" src="Images/trash.png" alt="Delete"></a></td>
                                                 <td><a href="action.php?action=updateUser&uid=<?php echo $user['userID']; ?>"><img class="icon-util" src="Images/edit.png" alt="Update"></a></td>
-
                                             </tr>
                                         <?php } ?>
                                     <?php endforeach;?>
@@ -108,10 +117,10 @@
                   </div>
   </body>
 </html>
+
 <?php
 
   //include_once('/Applications/XAMPP/xamppfiles/htdocs/WP_FinalProject/footer.php');
 
 ?>
-
     
