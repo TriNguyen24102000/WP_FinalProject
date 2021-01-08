@@ -1,4 +1,22 @@
-<!-- <?php
+
+<?php
+
+    //include_once('/Applications/XAMPP/xamppfiles/htdocs/WP_FinalProject/header.php');
+
+?>
+
+<?php
+										  
+	if(isset($_GET['success']))
+	{
+		if($_GET['success'] == "deleteSuccess");
+			echo "<script>alert('Delete Success');</script>";
+	}
+									 
+?>
+
+<?php
+
 
     session_start();
     include_once('../Service/UserService.php');
@@ -10,63 +28,6 @@
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
-</head>
-<body>
-    <?php
-        // date_default_timezone_set("Asia/Kolkata");
-
-        // $userService = new UserService(new UserRepo);
-        // $userName = "trongtri";
-        // $password = md5(12345);
-        // $fullName = "Nguyen Minh Trong Tri";
-        // $email = "trongtri@gmail.com";
-        // $dob = date("Y-m-d H:i:s");
-        // $address = "adasd";
-        // $phone = 123;
-
-        // $user = null;
-        // $data = $userService->getAllUsers();
-        // //$user = new UserDTO($userName, $fullName, $password, $email, $dob, $phone, $address, date("Y-m-d H:i:s"), date("Y-m-d H:i:s"));
-
-        // foreach($data as $temp)
-        // {
-        //     if($temp['username'] == $userName)
-        //     {
-        //         $user = $temp;
-        //         break;
-        //     }
-        // }
-        
-        // $user['username'] = "ahihi";
-        // $user['email'] = "aigu@gmail.com";
-
-        // $userPassed = new UserDTO($user['userID'], $user['username'], $user['fullName'], $user['password'], $user['email'],
-        //                                             $user['dob'], $user['phone'], $user['address'], $user['createAt'], $user['updateAt']);
-
-        // var_dump($userPassed);
-
-        // $result = $userService->updateUser($userPassed);
-
-        // if($result == true)
-        // {
-        //     echo "update thanh cong";
-        // }
-        // else
-        // {
-        //     echo "update that bai";
-        // }
-        //$_SESSION['userID'] = 
-    ?>
-
-    
-</body>
-</html> -->
 
 
 <!DOCTYPE html>
@@ -106,6 +67,9 @@
 							</div>
 						</div>
 		  				<div class="panel-body">
+						  
+						  <td><a  href="action.php?action=addUser" style="margin: 10px 0px 10px 25cm;"><img class="icon-util" src="Images/plus.png" alt="Update"></a></td>
+
 		  					<table class="table">
 				              <thead>
 				                <tr>
@@ -118,7 +82,6 @@
 				                </tr>
 				              </thead>
 				              <tbody>
-				                
                                     <?php foreach($data as $user): ?>
                                         <?php if($user['roleID'] != 1) 
                                               {
@@ -127,13 +90,13 @@
                                                 <td><?php echo $index++;?></td>
                                                 <td><?php echo $user['username'];?></td>
                                                 <td><?php echo $user['password'];?></td>
-                                                <td><?php echo $user['fullName'];?></td>
+                                                <td><?php echo $user['name'];?></td>
                                                 <td><?php echo $user['address'];?></td>
                                                 <td><?php echo $user['phone'];?></td>
                                                 
-                                                
-                                                <td><a href="getaction.php?uid=<?php echo $user['userID']; ?>"><img class="icon-util" src="Images/trash.png" alt="Delete"></a></td>
-                                                <td><a href="getaction.php?uid=<?php echo $user['userID']; ?>"><img class="icon-util" src="Images/edit.png" alt="Delete"></a></td>
+                                                <td><a href="action.php?action=deleteUser&uid=<?php echo $user['userID']; ?>"><img class="icon-util" src="Images/trash.png" alt="Delete"></a></td>
+                                                <td><a href="action.php?action=updateUser&uid=<?php echo $user['userID']; ?>"><img class="icon-util" src="Images/edit.png" alt="Update"></a></td>
+
                                             </tr>
                                         <?php } ?>
                                     <?php endforeach;?>
@@ -145,6 +108,10 @@
                   </div>
   </body>
 </html>
+<?php
 
+  //include_once('/Applications/XAMPP/xamppfiles/htdocs/WP_FinalProject/footer.php');
+
+?>
 
     

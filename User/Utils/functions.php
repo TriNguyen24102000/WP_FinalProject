@@ -97,4 +97,16 @@
    {
        return strlen($str) == 0;
    }
+
+   function getIDByUserName($array, $username)
+   {
+       foreach($array as $data)
+       {
+           if($data['username'] = $username)
+           {
+               return $data['userID'];
+           }
+       }
+   }
+
 ?>

@@ -7,9 +7,15 @@
     $confirmPassword = $_POST['confirmPassword'];
     $fullName = $_POST['fullName'];
     $email = $_POST['email'];
-    $dob = $_POST['dob'];
+
+    $dob_day = $_POST['dob_day'];
+    $dob_month = $_POST['dob_month'];
+    $dob_year = $_POST['dob_year'];
     $address = $_POST['address'];
     $phone = $_POST['phone'];
+
+    $dob = date("Y-m-d H:i:s", $dob_year . "-" . $dob_month . "-" . $dob_year);
+
 
     if(isCorrectSignupFormat($userName, $password, $fullName, $email, $address, $dob, $phone) == false 
             && isEmpty($userName) || isEmpty($password) || isEmpty($confirmPassword) || isEmpty($fullName) || isEmpty($email) || isEmpty(($dob)
@@ -50,11 +56,10 @@
         
                 if($result > 0)
                 {
-                    echo "<script>Create Account Success!!</script>";
-                    header('location: login.php');
+                    header('location: signup.php?success=createSuccess');
                 }
                 else
-                    echo "<script>Create Account Fail!!</script>";
+                    header('location: signup.php?error=createAccountFailed');
             }
         }
     }
