@@ -32,22 +32,18 @@
 
         public function insertUserToDB(UserDTO $userDTO)
         {
-
             $sql = "INSERT INTO `user`(`userID`, `username`, `password`, `name`, `dob`, `address`, `phone`, `createAt`, `email`, `updateAt`, `roleID`) VALUES (:userID,:username,:password,:name,:dob,:address,:phone,:createAt,:email,:updateAt,2)";
             
-
             $stmt = Connect()->prepare($sql);
 
             $stmt->bindValue(':userID', $userDTO->userID);
             $stmt->bindValue(':username', $userDTO->userName);
-
             $stmt->bindValue(':password', $userDTO->password);
-            $stmt->bindValue(':name', $userDTO->fullName);
+            $stmt->bindValue(':name', $userDTO->name);
             $stmt->bindValue(':email', $userDTO->email);
             $stmt->bindValue(':dob', $userDTO->dob);
             $stmt->bindValue(':phone', $userDTO->phone);
             $stmt->bindValue(':address', $userDTO->address);
-
             $stmt->bindValue(':createAt', $userDTO->createAt);
             $stmt->bindValue(':updateAt', $userDTO->updateAt);
 
@@ -62,7 +58,6 @@
 
         public function deleteUserFromDB($id)
         {
-
             $queryDelFromOrderDetail_1 = "DELETE FROM `order_detail` WHERE `orderID` = (SELECT o.`orderID` FROM `order` o JOIN `user` u ON o.`userID` = u.`userID` WHERE u.`userID` = $id LIMIT 1)";                 
             $queryDelFromOrder_2 = "DELETE FROM `order` WHERE `userID` = $id";
             $queryDelFromUser_3 = "DELETE FROM `user` WHERE `userID` = $id";
@@ -74,20 +69,19 @@
 
             $numRow = $stmt_3->rowCount();
 
-
             return $numRow > 0 ? true : false;
         }
 
         public function updateUserToDB(UserDTO $userDTO)
         {
 
-            $sql = "UPDATE `user` SET `username`=:username,`password`=:password, `fullName`= :fullname,`dob`= :dob,`address`= :addr,`phone`= :phone,`createAt`= :createAt,`email`= :email,`updateAt`= :updateAt, `roleID`= 2 WHERE `userID`= :userID";                        
+            $sql = "UPDATE `user` SET `username`=:username,`password`=:password, `name`= :fname,`dob`= :dob,`address`= :addr,`phone`= :phone,`createAt`= :createAt,`email`= :email,`updateAt`= :updateAt, `roleID`= 2 WHERE `userID`= :userID";                        
             $stmt = Connect()->prepare($sql);
 
             $stmt->bindValue(':userID', $userDTO->userID);
             $stmt->bindValue(':username', $userDTO->userName);
             $stmt->bindValue(':password', $userDTO->password);
-            $stmt->bindValue(':fullname', $userDTO->fullName);
+            $stmt->bindValue(':fname', $userDTO->name);
             $stmt->bindValue(':dob', $userDTO->dob);
             $stmt->bindValue(':addr', $userDTO->address);
             $stmt->bindValue(':phone', $userDTO->phone);

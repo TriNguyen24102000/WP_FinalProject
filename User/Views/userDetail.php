@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-sm-6 col-md-8">
                         <h4>
-                            <?php echo $data['fullName']; ?></h4>
+                            <?php echo $data['name']; ?></h4>
                         <small><?php echo $data['address']; ?><i class="glyphicon glyphicon-map-marker">
                         </i></cite></small>
                         <p>

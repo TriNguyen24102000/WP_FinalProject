@@ -1,9 +1,11 @@
 <?php
 
+    session_start();
     include('../Service/UserService.php');
     $userService = new UserService(new UserRepo);
     $users = $userService->getAllUsers();
     $userID = $_GET['uid'];
+    $_SESSION['saveUID'] = $userID;
 
     $userMatchWithID = $userService->getUserByID($userID);
     $dob = DateTime::createFromFormat("Y-m-d H:i:s", $userMatchWithID['dob']);
@@ -26,7 +28,7 @@
 <body>
 
     <div class="container right-panel-active" id="container">
-                <form action="checkSignup.php" method="POST">
+                <form action="checkUpdateForm.php" method="POST">
                     <h1 style="padding-top: 15px"> User Profile </h1>
                     <div>
                         <label>Name:   </label>
@@ -67,7 +69,7 @@
                         <label>Birthday: </label>
                         <span>
                             <label>Day: </label>
-                            <select name="Day">
+                            <select name="dob_day">
                                 <?php 
                                     for($i = 1; $i <= 31; ++$i) {
                                         if($i == $dob_day)
@@ -79,7 +81,7 @@
                             </select>
 
                             <label>Month: </label>
-                            <select name="Month">
+                            <select name="dob_month">
                                 <?php 
                                     for($i = 1; $i <= 12; ++$i) {
                                         if($i == $dob_month)
@@ -91,7 +93,7 @@
                             </select>
 
                             <label>Year: </label>
-                            <select name="Year">
+                            <select name="dob_year">
                                 <?php
                                     for($i = date("Y"); $i >= 1900; --$i) {
                                         if($i == $dob_year)
@@ -102,17 +104,6 @@
                                 <?php }?>
                             </select>
                         </span>
-                        
-                        <br>
-                        <div style="margin: 10px 0px 10px -220px;">
-                            <label>Role: </label>
-                            <select name="role">
-                                <?php if($userMatchWithID['roleID'] == 2)?>
-                                    <option value="2" selected="selected">User</option>
-                                <?php if($userMatchWithID['roleID'] != 2) ?>
-                                    <option value="1">Admin</option>
-                            </select>
-                        </div>
                     <br><br>
                     <button type="submit" style="margin-top:5px" > Update</button>
                 </form>
