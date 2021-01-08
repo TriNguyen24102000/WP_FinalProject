@@ -4,10 +4,10 @@
 <!------ Include the above in your HEAD tag ---------->
 
 <?php
-    include_once('../Service/UserService.php');
+include_once('../Service/UserService.php');
 
-    $userService = new UserService(new UserRepo);
-    $data = $userService->getUserByID(1);
+$userService = new UserService(new UserRepo);
+$data = $userService->getUserByID(1);
 ?>
 
 <div class="container">
@@ -20,15 +20,16 @@
                     </div>
                     <div class="col-sm-6 col-md-8">
                         <h4>
-                            <?php echo $data['fullName']; ?></h4>
+                            <?php echo $data['name']; ?></h4>
                         <small><?php echo $data['address']; ?><i class="glyphicon glyphicon-map-marker">
-                        </i></cite></small>
+                            </i></cite></small>
                         <p>
-                            <i class="glyphicon glyphicon-envelope"></i><?php echo $data['email']; ?> 
+                            <i class="glyphicon glyphicon-envelope"></i><?php echo $data['email']; ?>
                             <br />
-                            <i class="glyphicon glyphicon-globe"></i><?php echo $data['phone']; ?> 
+                            <i class="glyphicon glyphicon-globe"></i><?php echo $data['phone']; ?>
                             <br />
-                            <i class="glyphicon glyphicon-gift"></i><?php echo date("F j, g:i a", strtotime($data['dob']));?></p>
+                            <i class="glyphicon glyphicon-gift"></i><?php echo date("F j, g:i a", strtotime($data['dob'])); ?>
+                        </p>
                     </div>
                 </div>
             </div>

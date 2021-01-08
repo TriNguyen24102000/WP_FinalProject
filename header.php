@@ -4,13 +4,13 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 if (!isset($_SESSION['unpaidItems'])) {
   $_SESSION['unpaidItems'] = array();
+  $_SESSION['unpaidItems']['count'] = 0;
 }
 
 if (!isset($_SESSION['uid'])) {
-  $_SESSION['uid'] = '';
+  $_SESSION['uid'] = '-1';
 }
 $cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) : 0;
-
 ?>
 
 <!DOCTYPE html>
@@ -111,7 +111,7 @@ $cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) :
         <!-- cart details -->
         <div class="top_nav_right">
           <div class="wthreecartaits wthreecartaits2 cart cart box_1">
-            <form action="#" method="post" class="last">
+            <form action="Order/Views/user_listOrder.php" method="post" class="last">
               <input type="hidden" name="cmd" value="_cart" />
               <input type="hidden" name="display" value="1" />
               <button class="w3view-cart" style="width: 60px; height:44px;" type="submit" name="submit" value="">

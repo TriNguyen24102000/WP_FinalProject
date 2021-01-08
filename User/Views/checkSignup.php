@@ -1,6 +1,6 @@
 <?php
     date_default_timezone_set("Asia/Kolkata");
-    include_once('../Utils/functions.php');
+    include_once(__DIR__.'/../Utils/functions.php');
 
     $userName = $_POST['userName'];
     $password = $_POST['password'];
@@ -58,4 +58,3 @@
             }
         }
     }
-?>

@@ -1,6 +1,6 @@
 <?php
 
-include_once(__DIR__ . '/../Service/UserService.php');
+include_once('../Service/UserService.php');
 
 function Connect()
 {

@@ -1,9 +1,9 @@
 <?php
 
-    include_once('../Service/OrderService.php');
-    include_once('../Views//orderDetail.php');
+include_once('../Service/OrderService.php');
+include_once('../Views//orderDetail.php');
 
-    echo $arr[0];
+echo $arr[0];
 
 ?>
 
@@ -21,17 +21,19 @@
 
 <?php
 
-        echo $arr[0];
-        // $userService = new OrderService(new OrderRepo);
-        // $data = $userService->getAllOrders();
-    ?>
+echo $arr[0];
+// $userService = new OrderService(new OrderRepo);
+// $data = $userService->getAllOrders();
+?>
 
-<?php //foreach($data as $temp): ?>
+<?php //foreach($data as $temp): 
+?>
     <tr>
         
-        <td>//<?php echo $temp['orderID'];?></td>
+        <td>//<?php echo $temp['orderID']; ?></td>
     </tr>
-<?php //endforeach; ?>
+<?php //endforeach; 
+?>
 
 </table>
 
@@ -55,7 +57,7 @@
 	<meta name="keywords" content="Goggles a Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
 	<script>
-		addEventListener("load", function () {
+		addEventListener("load", function() {
 			setTimeout(hideURLbar, 0);
 		}, false);
 
@@ -72,16 +74,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<link href="css/style.css" rel='stylesheet' type='text/css' />
 	<link href="css/fontawesome-all.css" rel="stylesheet">
 	<link href="//fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
-	<link href="//fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800"
-	    rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800" rel="stylesheet">
 </head>
 
 <body>
 
-    <?php   
-            $orderService = new OrderService(new OrderRepo);
-            $data = $orderService->getAllOrders();
-    ?>
+	<?php
+	$orderService = new OrderService(new OrderRepo);
+	$data = $orderService->getAllOrders();
+	?>
 
 	<div class="banner-top container-fluid" id="home">
 		<!-- header -->
@@ -89,10 +90,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<label class="top-log mx-auto"></label>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light top-header mb-2">
 
-				<button class="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-				    aria-expanded="false" aria-label="Toggle navigation">
+				<button class="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon">
-						
+
 					</span>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -106,8 +106,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<a class="nav-link" href="about.html">About</a>
 						</li>
 						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-							    aria-expanded="false">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Features
 							</a>
 							<ul class="dropdown-menu mega-menu ">
@@ -159,8 +158,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							</ul>
 						</li>
 						<li class="nav-item dropdown active">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true"
-							    aria-expanded="false">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Shop
 							</a>
 							<ul class="dropdown-menu mega-menu ">
@@ -287,12 +285,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<h3 class="tittle-w3layouts my-lg-4 mt-3">Checkout </h3>
 				<div class="checkout-right">
 					<h4>Your shopping cart contains:
-						<span> 
-                            <?php  
-                                $productNum = count($data);
-                                echo $productNum . ($productNum > 1 ? " Products" : " Product"); 
-                            ?>
-                        </span>
+						<span>
+							<?php
+							$productNum = count($data);
+							echo $productNum . ($productNum > 1 ? " Products" : " Product");
+							?>
+						</span>
 					</h4>
 					<table class="timetable_sub">
 						<thead>
@@ -307,37 +305,37 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							</tr>
 						</thead>
 						<tbody>
-                            
-                            <?php foreach($data as $order): ?>
-                                
-                                <tr class="rem1">
-                                    <td class="invert"><?php echo $order['id']; ?></td>
-                                    <td class="invert-image">
-                                        <a href="single.html">
-                                            <img src="images/s1.jpg" alt=" " class="img-responsive">
-                                        </a>
-                                    </td>
-                                    <td class="invert">
-                                        <div class="quantity">
-                                            <div class="quantity-select">
-                                                <div class="entry value">
-                                                    <span> <?php echo $order['saleQuantity'];?> </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="invert"><?php echo $order['productName']; ?> </td>
 
-                                    <td class="invert"><?php echo ($order['price'] * $order['saleQuantity']); ?></td>
-                                    <td class="invert">
-                                        <div class="rem">
-                                            <div class="close1"> </div>
-                                        </div>
+							<?php foreach ($data as $order) : ?>
 
-                                    </td>
-                                
-                                </tr>
-                            <?php endforeach; ?>
+								<tr class="rem1">
+									<td class="invert"><?php echo $order['id']; ?></td>
+									<td class="invert-image">
+										<a href="single.html">
+											<img src="images/s1.jpg" alt=" " class="img-responsive">
+										</a>
+									</td>
+									<td class="invert">
+										<div class="quantity">
+											<div class="quantity-select">
+												<div class="entry value">
+													<span> <?php echo $order['saleQuantity']; ?> </span>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td class="invert"><?php echo $order['productName']; ?> </td>
+
+									<td class="invert"><?php echo ($order['price'] * $order['saleQuantity']); ?></td>
+									<td class="invert">
+										<div class="rem">
+											<div class="close1"> </div>
+										</div>
+
+									</td>
+
+								</tr>
+							<?php endforeach; ?>
 
 						</tbody>
 					</table>
@@ -348,24 +346,24 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						</ul>
 					</div>
 					<div class="col-md-8 address_form">
-						
+
 					</div>
 
 					<div class="clearfix"> </div>
 
 				</div>
 
-                
-                
+
+
 			</div>
-           
-        </div>
-        
-                
+
+		</div>
+
+
 	</section>
 	<!--//checkout-->
 	<!--footer -->
-	
+
 	<!-- //footer -->
 	<!--jQuery-->
 	<script src="js/jquery-2.2.3.min.js"></script>
@@ -380,7 +378,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script>
 		googles.render();
 
-		googles.cart.on('googles_checkout', function (evt) {
+		googles.cart.on('googles_checkout', function(evt) {
 			var items, len, i;
 
 			if (this.subtotal() > 0) {
@@ -392,13 +390,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</script>
 	<!-- //cart-js -->
 	<script>
-		$(document).ready(function () {
-			$(".button-log a").click(function () {
+		$(document).ready(function() {
+			$(".button-log a").click(function() {
 				$(".overlay-login").fadeToggle(200);
 				$(this).toggleClass('btn-open').toggleClass('btn-close');
 			});
 		});
-		$('.overlay-close1').on('click', function () {
+		$('.overlay-close1').on('click', function() {
 			$(".overlay-login").fadeToggle(200);
 			$(".button-log a").toggleClass('btn-open').toggleClass('btn-close');
 			open = false;
@@ -408,13 +406,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!-- easy-responsive-tabs -->
 	<script src="js/easy-responsive-tabs.js"></script>
 	<script>
-		$(document).ready(function () {
+		$(document).ready(function() {
 			$('#horizontalTab').easyResponsiveTabs({
 				type: 'default', //Types: default, vertical, accordion           
 				width: 'auto', //auto or any width like 600px
 				fit: true, // 100% fit in a container
 				closed: 'accordion', // Start closed if in accordion view
-				activate: function (event) { // Callback function if tab is switched
+				activate: function(event) { // Callback function if tab is switched
 					var $tab = $(this);
 					var $info = $('#tabInfo');
 					var $name = $('span', $info);
@@ -431,13 +429,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</script>
 	<!--quantity-->
 	<script>
-		$('.value-plus').on('click', function () {
+		$('.value-plus').on('click', function() {
 			var divUpd = $(this).parent().find('.value'),
 				newVal = parseInt(divUpd.text(), 10) + 1;
 			divUpd.text(newVal);
 		});
 
-		$('.value-minus').on('click', function () {
+		$('.value-minus').on('click', function() {
 			var divUpd = $(this).parent().find('.value'),
 				newVal = parseInt(divUpd.text(), 10) - 1;
 			if (newVal >= 1) divUpd.text(newVal);
@@ -446,27 +444,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!--quantity-->
 	<!--close-->
 	<script>
-		$(document).ready(function (c) {
-			$('.close1').on('click', function (c) {
-				$('.rem1').fadeOut('slow', function (c) {
+		$(document).ready(function(c) {
+			$('.close1').on('click', function(c) {
+				$('.rem1').fadeOut('slow', function(c) {
 					$('.rem1').remove();
 				});
 			});
 		});
 	</script>
 	<script>
-		$(document).ready(function (c) {
-			$('.close2').on('click', function (c) {
-				$('.rem2').fadeOut('slow', function (c) {
+		$(document).ready(function(c) {
+			$('.close2').on('click', function(c) {
+				$('.rem2').fadeOut('slow', function(c) {
 					$('.rem2').remove();
 				});
 			});
 		});
 	</script>
 	<script>
-		$(document).ready(function (c) {
-			$('.close3').on('click', function (c) {
-				$('.rem3').fadeOut('slow', function (c) {
+		$(document).ready(function(c) {
+			$('.close3').on('click', function(c) {
+				$('.rem3').fadeOut('slow', function(c) {
 					$('.rem3').remove();
 				});
 			});
@@ -476,13 +474,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 	<!-- dropdown nav -->
 	<script>
-		$(document).ready(function () {
+		$(document).ready(function() {
 			$(".dropdown").hover(
-				function () {
+				function() {
 					$('.dropdown-menu', this).stop(true, true).slideDown("fast");
 					$(this).toggleClass('open');
 				},
-				function () {
+				function() {
 					$('.dropdown-menu', this).stop(true, true).slideUp("fast");
 					$(this).toggleClass('open');
 				}
@@ -491,45 +489,42 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</script>
 	<!-- //dropdown nav -->
 	<script src="js/move-top.js"></script>
-    <script src="js/easing.js"></script>
-    <script>
-        jQuery(document).ready(function($) {
-            $(".scroll").click(function(event) {
-                event.preventDefault();
-                $('html,body').animate({
-                    scrollTop: $(this.hash).offset().top
-                }, 900);
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            /*
-            						var defaults = {
-            							  containerID: 'toTop', // fading element id
-            							containerHoverID: 'toTopHover', // fading element hover id
-            							scrollSpeed: 1200,
-            							easingType: 'linear' 
-            						 };
-            						*/
+	<script src="js/easing.js"></script>
+	<script>
+		jQuery(document).ready(function($) {
+			$(".scroll").click(function(event) {
+				event.preventDefault();
+				$('html,body').animate({
+					scrollTop: $(this.hash).offset().top
+				}, 900);
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			/*
+									var defaults = {
+										  containerID: 'toTop', // fading element id
+										containerHoverID: 'toTopHover', // fading element hover id
+										scrollSpeed: 1200,
+										easingType: 'linear' 
+									 };
+									*/
 
-            $().UItoTop({
-                easingType: 'easeOutQuart'
-            });
+			$().UItoTop({
+				easingType: 'easeOutQuart'
+			});
 
-        });
-    </script>
+		});
+	</script>
 
-    <script>
+	<script>
+		function AddToOrder() {
+			<?php ?>
+		}
+	</script>
 
-        function AddToOrder()
-        {
-            <?php ?>
-        }
-
-    </script>
-
-<!--// end-smoth-scrolling -->
+	<!--// end-smoth-scrolling -->
 
 
 	<script src="js/bootstrap.js"></script>

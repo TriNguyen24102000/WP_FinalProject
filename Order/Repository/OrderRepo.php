@@ -1,110 +1,114 @@
 <?php
 
-    include_once('../Utils/functions.php');
-    
-    class OrderRepo
-    {
-        public function getAllOrders()
-        {
-            try
-            {
-                $sql = "SELECT * FROM `order_detail` JOIN `order` ON `order_detail`.orderID = `order`.orderID JOIN `product` ON `order_detail`.productID = `product`.productID";
-                $stmt = Connect()->query($sql);
+include_once(__DIR__ . '/../Utils/functions.php');
 
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
-                {
-                    $data[] = $row;
-                }
+class OrderRepo
+{
+	private $conn;
+	public function __construct()
+	{
+		$this->conn =	OrderConnect();
+	}
 
-                return $data;
-            }
-            catch(Exception $ex)
-            {
-                echo $ex->getMessage();
-            }
-        }
+	public function getAllOrders()
+	{
+		try {
+			$sql = "SELECT * FROM `order_detail` JOIN `order` ON `order_detail`.orderID = `order`.orderID JOIN `product` ON `order_detail`.productID = `product`.productID";
+			$stmt = $this->conn->query($sql);
 
-        public function getOrderByID($id)
-        {
-            try
-            {
-                $sql = "SELECT * FROM `order` WHERE orderID = :orderID";
-                $stmt = Connect()->prepare($sql);
-                $stmt->bindValue(":orderID", $id);
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				$data[] = $row;
+			}
 
-                $stmt->execute();
+			return $data;
+		} catch (Exception $ex) {
+			echo $ex->getMessage();
+		}
+	}
 
-                return $stmt->fetch(PDO::FETCH_ASSOC);
+	public function getOrderByID($id)
+	{
+		try {
+			$sql = "SELECT * FROM `order` WHERE orderID = :orderID";
+			$stmt = $this->conn->prepare($sql);
+			$stmt->bindValue(":orderID", $id);
 
-            }
-            catch(Exception $ex)
-            {
-                echo $ex->getMessage();
-            }
-        }
+			$stmt->execute();
 
-        public function getLastOrderID()
-        {
-            $sql = "SELECT `ordID` FROM `order` ORDER BY `ordID` DESC LIMIT 1";
-            $stmt = Connect()->query($sql);
+			return $stmt->fetch(PDO::FETCH_ASSOC);
+		} catch (Exception $ex) {
+			echo $ex->getMessage();
+		}
+	}
 
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        }
+	public function getLastOrderID()
+	{
+		$sql = "SELECT `ordID` FROM `order` ORDER BY `ordID` DESC LIMIT 1";
+		$stmt = $this->conn->query($sql);
 
-        public function insertOrderToDB(OrderDTO $orderDTO)
-        {
-            //insert normal user -> role ID = 1;
-            $order = $this->getLastOrderID();
-            $nextOrderID = $order['ordID'] + 1;
-            $sql = "INSERT INTO `order`(`orderID`, `userID`, `createAt`, `totalPrice`, `updateAt`) VALUES ($nextOrderID, :userID, :totalPrice, :createAt, :updateAt)";
+		return $stmt->fetch(PDO::FETCH_ASSOC);
+	}
 
-            $stmt = Connect()->prepare($sql);
-            $stmt->bindValue(':userID', $orderDTO->userID);      //combobox
-            $stmt->bindValue(':addr', $orderDTO->totalPrice);
-            $stmt->bindValue(':createAt', $orderDTO->createAt);
-            $stmt->bindValue(':updateAt', $orderDTO->updateAt);
+	public function insertOrderToDB(OrderDTO $orderDTO)
+	{
+		//insert normal user -> role ID = 1;
+		$order = $this->getLastOrderID();
+		$nextOrderID = $order['ordID'] + 1;
+		$sql = "INSERT INTO `order`(`orderID`, `userID`, `createAt`, `totalPrice`, `updateAt`) VALUES ($nextOrderID, :userID, :totalPrice, :createAt, :updateAt)";
 
-            $stmt->execute();
+		$stmt = 	$this->conn->prepare($sql);
+		$stmt->bindValue(':userID', $orderDTO->userID);      //combobox
+		$stmt->bindValue(':addr', $orderDTO->totalPrice);
+		$stmt->bindValue(':createAt', $orderDTO->createAt);
+		$stmt->bindValue(':updateAt', $orderDTO->updateAt);
 
-            $numRow = $stmt->rowCount();
+		$stmt->execute();
 
-            if($numRow > 0)
-                return true;
-            return false;
-        }
+		$numRow = $stmt->rowCount();
 
-        public function deleteOrderFromDB($id)
-        {
-            $sql = "DELETE `order` WHERE orderID = :orderID";
-            
-            $stmt = Connect()->prepare($sql);
-            $stmt->bindValue('order', $id);
+		if ($numRow > 0)
+			return true;
+		return false;
+	}
 
-            $stmt->execute();
+	public function deleteOrderFromDB($id)
+	{
+		$sql = "DELETE `order` WHERE orderID = :orderID";
 
-            $numRow = $stmt->rowCount();
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bindValue('order', $id);
 
-            return $numRow > 0 ? true : false;
-        }
+		$stmt->execute();
 
-        public function updateOrder(OrderDTO $orderDTO)
-        {
+		$numRow = $stmt->rowCount();
 
-            $sql = "UPDATE `order` SET userID = :userID,
+		return $numRow > 0 ? true : false;
+	}
+
+	public function updateOrder(OrderDTO $orderDTO)
+	{
+
+		$sql = "UPDATE `order` SET userID = :userID,
                                        totalPrice = :totalPrice,
                                        createAt = :createAt,
                                        updateAt = :updateAt";
 
-            $stmt = Connect()->prepare($sql);
-            $stmt->bindValue(':userID', $orderDTO->userID);
-            $stmt->bindValue(':totalPrice', $orderDTO->totalPrice);
-            $stmt->bindValue(':createAt', $orderDTO->createAt);
-            $stmt->bindValue(':updateAt', $orderDTO->updateAt);
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bindValue(':userID', $orderDTO->userID);
+		$stmt->bindValue(':totalPrice', $orderDTO->totalPrice);
+		$stmt->bindValue(':createAt', $orderDTO->createAt);
+		$stmt->bindValue(':updateAt', $orderDTO->updateAt);
 
-            $numRow = $stmt->rowCount();
+		$numRow = $stmt->rowCount();
 
-            return $numRow > 0 ? true : false;
-        }
-    }
+		return $numRow > 0 ? true : false;
+	}
 
-?>
+
+	public function insertOrderDetail($orderID, $productID, $quantity)
+	{
+		$sql = "INSERT INTO `order_detail` (`orderID`, `productID`, `quantity`)
+		VALUES('$orderID', '$productID', '$quantity')";
+		$this->conn->query($sql);
+	}
+}

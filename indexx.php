@@ -6,7 +6,7 @@
 <?php
 include_once(__DIR__ . '/Product/Service/ProductService.php');
 include_once(__DIR__ . '/Category/Service/CategoryService.php');
-include_once(__DIR__ . '/header.php');
+include(__DIR__ . '/header.php');
 ?>
 
 <?php
@@ -146,7 +146,7 @@ $newestProducts = $productService->getNewestProducts(10);
                   <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
                     <form action="indexCartIncre.php" method="post">
                       <fieldset>
-                        <input type="hidden" name="productID" value="<?php $product['productID'] ?>" />
+                        <input type="hidden" name="productID" value="<?php echo $product['productID'] ?>" />
                         <input type="submit" name="submit" value="Add to cart" class="button" />
                       </fieldset>
                     </form>
@@ -202,7 +202,7 @@ $newestProducts = $productService->getNewestProducts(10);
                   <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
                     <form action="indexCartIncre.php" method="post">
                       <fieldset>
-                        <input type="hidden" name="productID" value="<?php $product['productID'] ?>" />
+                        <input type="hidden" name="productID" value="<?php echo $product['productID'] ?>" />
                         <input type="submit" name="submit" value="Add to cart" class="button" />
                       </fieldset>
                     </form>
