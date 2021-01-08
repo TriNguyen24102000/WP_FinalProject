@@ -1,3 +1,4 @@
+
 <?php
 
     //include_once('/Applications/XAMPP/xamppfiles/htdocs/WP_FinalProject/header.php');
@@ -16,6 +17,7 @@
 
 <?php
 
+
     session_start();
     include_once('../Service/UserService.php');
 
@@ -25,6 +27,7 @@
     $index = 1;
 
 ?>
+
 
 
 <!DOCTYPE html>
@@ -66,6 +69,7 @@
 		  				<div class="panel-body">
 						  
 						  <td><a  href="action.php?action=addUser" style="margin: 10px 0px 10px 25cm;"><img class="icon-util" src="Images/plus.png" alt="Update"></a></td>
+
 		  					<table class="table">
 				              <thead>
 				                <tr>
@@ -78,8 +82,6 @@
 				                </tr>
 				              </thead>
 				              <tbody>
-
-									  
                                     <?php foreach($data as $user): ?>
                                         <?php if($user['roleID'] != 1) 
                                               {
@@ -94,6 +96,7 @@
                                                 
                                                 <td><a href="action.php?action=deleteUser&uid=<?php echo $user['userID']; ?>"><img class="icon-util" src="Images/trash.png" alt="Delete"></a></td>
                                                 <td><a href="action.php?action=updateUser&uid=<?php echo $user['userID']; ?>"><img class="icon-util" src="Images/edit.png" alt="Update"></a></td>
+
                                             </tr>
                                         <?php } ?>
                                     <?php endforeach;?>
@@ -105,10 +108,10 @@
                   </div>
   </body>
 </html>
-
 <?php
 
   //include_once('/Applications/XAMPP/xamppfiles/htdocs/WP_FinalProject/footer.php');
 
 ?>
+
     

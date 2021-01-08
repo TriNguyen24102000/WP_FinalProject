@@ -7,6 +7,7 @@
     $confirmPassword = $_POST['confirmPassword'];
     $fullName = $_POST['fullName'];
     $email = $_POST['email'];
+
     $dob_day = $_POST['dob_day'];
     $dob_month = $_POST['dob_month'];
     $dob_year = $_POST['dob_year'];
@@ -14,6 +15,7 @@
     $phone = $_POST['phone'];
 
     $dob = date("Y-m-d H:i:s", $dob_year . "-" . $dob_month . "-" . $dob_year);
+
 
     if(isCorrectSignupFormat($userName, $password, $fullName, $email, $address, $dob, $phone) == false 
             && isEmpty($userName) || isEmpty($password) || isEmpty($confirmPassword) || isEmpty($fullName) || isEmpty($email) || isEmpty(($dob)

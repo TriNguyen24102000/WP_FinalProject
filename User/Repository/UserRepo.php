@@ -32,18 +32,22 @@
 
         public function insertUserToDB(UserDTO $userDTO)
         {
+
             $sql = "INSERT INTO `user`(`userID`, `username`, `password`, `name`, `dob`, `address`, `phone`, `createAt`, `email`, `updateAt`, `roleID`) VALUES (:userID,:username,:password,:name,:dob,:address,:phone,:createAt,:email,:updateAt,2)";
             
+
             $stmt = Connect()->prepare($sql);
 
             $stmt->bindValue(':userID', $userDTO->userID);
             $stmt->bindValue(':username', $userDTO->userName);
+
             $stmt->bindValue(':password', $userDTO->password);
             $stmt->bindValue(':name', $userDTO->fullName);
             $stmt->bindValue(':email', $userDTO->email);
             $stmt->bindValue(':dob', $userDTO->dob);
             $stmt->bindValue(':phone', $userDTO->phone);
             $stmt->bindValue(':address', $userDTO->address);
+
             $stmt->bindValue(':createAt', $userDTO->createAt);
             $stmt->bindValue(':updateAt', $userDTO->updateAt);
 
@@ -58,6 +62,7 @@
 
         public function deleteUserFromDB($id)
         {
+
             $queryDelFromOrderDetail_1 = "DELETE FROM `order_detail` WHERE `orderID` = (SELECT o.`orderID` FROM `order` o JOIN `user` u ON o.`userID` = u.`userID` WHERE u.`userID` = $id LIMIT 1)";                 
             $queryDelFromOrder_2 = "DELETE FROM `order` WHERE `userID` = $id";
             $queryDelFromUser_3 = "DELETE FROM `user` WHERE `userID` = $id";
@@ -68,6 +73,7 @@
             $stmt_3 = Connect()->query($queryDelFromUser_3);
 
             $numRow = $stmt_3->rowCount();
+
 
             return $numRow > 0 ? true : false;
         }
