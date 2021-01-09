@@ -1,6 +1,6 @@
 <?php
 
-    include_once('../Service/ManufacturerService.php');
+    include_once(__DIR__ . '/../Service/ManufacturerService.php');
 
     $manmanuvice = new ManufacturerService(new ManufacturerRepo);
     $data = $manmanuvice->getAllManus();
@@ -34,7 +34,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manufacturer</title>
+    <title>Manufacturer Admin</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="../../css/style.css" rel="stylesheet" type="text/css" media="all" />
 </head>

@@ -57,10 +57,11 @@
                             <?php foreach($address as $addr){ 
                                 if($addr == $userMatchWithID['address'])
                                     echo "<option value= " . "$addr" . " selected= " . '"selected"' .  ">$addr</option>"; 
-                                else  
+                                else {
                             ?>
                                 <option value="<?php echo $addr ?>"><?php echo $addr ?></option>
-                            <?php } ?>
+                            <?php } 
+                                }?>
                         </select>
                     <span>
                     <br>
@@ -74,10 +75,11 @@
                                     for($i = 1; $i <= 31; ++$i) {
                                         if($i == $dob_day)
                                             echo "<option value= " . "$i" . " selected= " . '"selected"' .  ">$i</option>";   
-                                        else     
+                                        else {
                                 ?>
                                     <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                <?php }?>
+                                <?php }
+                                    }?>
                             </select>
 
                             <label>Month: </label>
@@ -86,10 +88,11 @@
                                     for($i = 1; $i <= 12; ++$i) {
                                         if($i == $dob_month)
                                             echo "<option value= " . "$i" . " selected= " . '"selected"' .  ">$i</option>";   
-                                        else 
+                                        else {
                                 ?>
                                         <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                    <?php } ?>
+                                    <?php } 
+                                        }?>
                             </select>
 
                             <label>Year: </label>
@@ -98,10 +101,11 @@
                                     for($i = date("Y"); $i >= 1900; --$i) {
                                         if($i == $dob_year)
                                             echo "<option value= " . "$i" . " selected= " . '"selected"' .  ">$i</option>";   
-                                        else 
+                                        else {
                                 ?>
                                             <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                <?php }?>
+                                <?php }
+                                    }?>
                             </select>
                         </span>
                     <br><br>
