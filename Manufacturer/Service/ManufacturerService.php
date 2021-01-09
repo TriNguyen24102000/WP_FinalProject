@@ -28,18 +28,7 @@
 
         public function deleteManu($id)
         {
-            // if($id > 0 && $id <= count($this->getAllManus()))
-            // {
-                echo "That's fine";
-                // if($this->manuRepo->deleteManuFromDB($id) == true)
-                // {
-                //     echo "<script> alert('xoa duoc roi nha'); </script>";
-                // }
-                // else
-                //     echo "<script> alert('khong the xoa duoc'); </script>";
-            // }
-            // else
-                echo "<script> alert('Hello! I am an alert box!!'); </script>";
+            return $this->manuRepo->deleteManuFromDB($id);
         }
 
         public function updateManu(ManuDTO $manuDTO)

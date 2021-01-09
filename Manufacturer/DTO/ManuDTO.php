@@ -3,7 +3,7 @@
     class ManuDTO
     {
         public $manuID;
-        public $manuName;
+        public $name;
         public $email;
         public $phone;
         public $createAt;

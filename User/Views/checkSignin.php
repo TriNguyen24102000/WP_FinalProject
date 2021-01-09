@@ -1,36 +1,54 @@
 <?php
 
-session_start();
+    session_start();
+    include_once(__DIR__ . '/../Service/UserService.php');
+    $userService = new UserService(new UserRepo);
+    $users = $userService->getAllUsers();
 
-include_once(__DIR__ . '/../Utils/functions.php');
+    try
+    {
+        $userName = $_POST['userName'];
+        $pwd = $_POST['password'];
+        $userMatch = null;
 
-try {
-    $userName = $_POST['userName'];
-    $pwd = $_POST['password'];
-
-
-    if (isEmpty($userName) || isEmpty($pwd)) {
-        header('location: login.php?error=emptyField');
-        exit();
-    } else {
-        $hashPwd = md5($pwd);
-        if (confirmAccount($userName, $hashPwd) == false) {
-            header('location: login.php?error=wrongLogin');
+        if(isEmpty($userName) || isEmpty($pwd))
+        {
+            header('location: login.php?error=emptyField');
             exit();
-        } else {
-            $role = getPermission($userName, $hashPwd);
-            $userRole = $role['role'];
-
-            if ($userRole == 'admin') {
-                $_SESSION["userID"] = $userName;
-                header('location: adminProfile.php');
+        }
+        else
+        {
+            $hashPwd = md5($pwd);
+            if(confirmAccount($userName, $hashPwd) == false)
+            {
+                header('location: login.php?error=wrongLogin');
                 exit();
-            } else
-                header('location: user.php');
+            }
+            else
+            {
+                $role = getPermission($userName, $hashPwd);
+                $userRole = $role['role'];
+                $userWithCorrespondUserName = getIDByUserName($users, $userName);
+                
+                //initialize SESSION.
+                $_SESSION['role'] = $userRole;
+                $_SESSION['uid'] = $userWithCorrespondUserName;
 
-            $_SESSION['role'] = $userRole;
+                if($userRole == 'admin')
+                {
+                    $_SESSION["userID"] = $userName;
+                    header('location: adminProfile.php');
+                    exit();
+
+                }
+                else
+                    //nav to product
+                    header('location: userDetail.php');
+            }
         }
     }
-} catch (Exception $ex) {
-    echo $ex->getMessage();
-}
+    catch(Exception $ex)
+    {
+        echo $ex->getMessage();
+    }
+?>

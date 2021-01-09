@@ -32,13 +32,11 @@
 
         public function insertManuToDB(ManuDTO $manuDTO)
         {
-            //insert normal user -> role ID = 1;
-            
-
-            $sql = "INSERT INTO `manufacturer`(`name`, `email`, `phone`, `createAt`, `updateAt`) VALUES (:manuname, :email, phone, :createAt, :updateAt)";
+            $sql = "INSERT INTO `manufacturer`(`manuID`, `name`, `email`, `phone`, `createAt`, `updateAt`) VALUES (:manuID, :name, :email, :phone, :createAt, :updateAt)";
             $stmt = Connect()->prepare($sql);
 
-            $stmt->bindValue(':manuname', $manuDTO->manuName);
+            $stmt->bindValue(':manuID', $manuDTO->manuID);
+            $stmt->bindValue(':name', $manuDTO->name);
             $stmt->bindValue(':email', $manuDTO->email);
             $stmt->bindValue(':phone', $manuDTO->phone);
             $stmt->bindValue(':createAt', $manuDTO->createAt);
@@ -53,16 +51,15 @@
             return false;
         }
 
-        public function deleteManuFromDB($id)
+        public function deleteManuFromDB($manuID)
         {
-            $sql = "DELETE FROM `manufacturer` WHERE `manuID` = :manuID";
+            $queryDelProductContainManu = "DELETE FROM `product` WHERE `manuID` = $manuID";
+            $queryDelManu = "DELETE FROM `manufacturer` WHERE `manuID` = $manuID";
             
-            $stmt = Connect()->prepare($sql);
-            $stmt->bindValue(':manuID', $id);
-
-            $stmt->execute();
-
-            $numRow = $stmt->rowCount();
+            $stmt_1 = Connect()->query($queryDelProductContainManu);
+            $stmt_2 = Connect()->query($queryDelManu);
+            
+            $numRow = $stmt_2->rowCount();
 
             return $numRow > 0 ? true : false;
         }
@@ -70,11 +67,11 @@
         public function updateManuToDB(ManuDTO $manuDTO)
         {
 
-            $sql = "UPDATE `manufacturer` SET `name`= :manuName, `email`= :email, `phone` = :phone, `createAt`= :createAt, `updateAt` = :updateAt WHERE `manuID` = :manuID";                        
+            $sql = "UPDATE `manufacturer` SET `name`= :name, `email`= :email, `phone` = :phone, `createAt`= :createAt, `updateAt` = :updateAt WHERE `manuID` = :manuID";                        
             $stmt = Connect()->prepare($sql);
 
             $stmt->bindValue(':manuID', $manuDTO->manuID);
-            $stmt->bindValue(':manuName', $manuDTO->manuName);
+            $stmt->bindValue(':name', $manuDTO->name);
             $stmt->bindValue(':email', $manuDTO->email);
             $stmt->bindValue(':phone', $manuDTO->phone);
             $stmt->bindValue(':createAt', $manuDTO->createAt);

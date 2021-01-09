@@ -21,4 +21,11 @@
         }
     }
 
+    function getLastManuID()
+    {
+        $sql = "SELECT `manuID` FROM `manufacturer` ORDER BY `manuID` DESC LIMIT 1";
+        $stmt = Connect()->query($sql);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC)['manuID'];
+    }
 ?>

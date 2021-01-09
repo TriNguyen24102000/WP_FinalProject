@@ -1,13 +1,10 @@
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
 <?php
-include_once(__DIR__ . '/../Service/UserService.php');
+    
+    session_start();
+    include_once(__DIR__ . '/../Service/UserService.php');
 
-$userService = new UserService(new UserRepo);
-$data = $userService->getUserByID(1);
+    $userService = new UserService(new UserRepo);
+    $data = $userService->getUserByID($_SESSION['uid']);
 ?>
 
 <div class="container">
@@ -22,14 +19,13 @@ $data = $userService->getUserByID(1);
                         <h4>
                             <?php echo $data['name']; ?></h4>
                         <small><?php echo $data['address']; ?><i class="glyphicon glyphicon-map-marker">
-                            </i></cite></small>
+                        </i></cite></small>
                         <p>
-                            <i class="glyphicon glyphicon-envelope"></i><?php echo ' ' . $data['email']; ?>
+                            <i class="glyphicon glyphicon-envelope"></i><?php echo $data['email']; ?> 
                             <br />
-                            <i class="glyphicon glyphicon-globe"></i><?php echo ' ' . $data['phone']; ?>
+                            <i class="glyphicon glyphicon-globe"></i><?php echo $data['phone']; ?> 
                             <br />
-                            <i class="glyphicon glyphicon-gift"></i><?php echo ' ' . date("F j, g:i a", strtotime($data['dob'])); ?>
-                        </p>
+                            <i class="glyphicon glyphicon-gift"></i><?php echo date("F j, g:i a", strtotime($data['dob']));?></p>
                     </div>
                 </div>
             </div>
