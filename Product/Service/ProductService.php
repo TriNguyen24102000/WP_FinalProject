@@ -96,4 +96,9 @@ class ProductService
 	{
 		return $this->productRepo->getAllManufacturers();
 	}
+
+	public function deleteProduct($proID)
+	{
+		return $this->productRepo->deleteProductFromDB($proID);
+	}
 }

@@ -22,14 +22,14 @@ class CategoryService
     return $this->categoryRepo->getCategoryById($cateID);
   }
 
-  public function insertCategory($name, $createAt = '', $updateAt = '')
+  public function insertCategory($name)
   {
-    return $this->categoryRepo->insertCategory($name, $createAt, $updateAt);
+    return $this->categoryRepo->insertCategory($name);
   }
 
-  public function updateCategory($category)
+  public function updateCategory($cateID, $name, $updateAt)
   {
-    return $this->categoryRepo->updateCategory($category);
+    return $this->categoryRepo->updateCategory($cateID, $name, $updateAt);
   }
 
   public function deleteCategory($cateID)

@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/../DTO/ProductDTO.php');
 include_once(__DIR__ . '/../Utils/functions.php');
 
 class ProductRepo
@@ -248,7 +249,7 @@ class ProductRepo
 	}
 
 	// update product
-	public function updateProduct($product)
+	public function updateProduct(ProductDTO $product)
 	{
 		$sql = ("UPDATE `product`
 				SET
@@ -265,17 +266,18 @@ class ProductRepo
 				WHERE `productID` = :productID");
 
 		$stmt = $this->conn->prepare($sql);
-		$stmt->bindParam(':name', $product['name'], PDO::PARAM_STR);
-		$stmt->bindParam(':manuID', $product['manuID']);
-		$stmt->bindParam(':quantity', $product['quantity']);
-		$stmt->bindParam(':view', $product['view']);
-		$stmt->bindParam(':createAt', $product['createAt']);
-		$stmt->bindParam(':updateAt', $product['updateAt']);
-		$stmt->bindParam(':description', $product['description']);
-		$stmt->bindParam(':cateID', $product['cateID']);
-		$stmt->bindParam(':price', $product['price']);
-		$stmt->bindParam(':image', $product['image']);
-		$stmt->bindParam(':productID', $product['productID'], PDO::PARAM_INT);
+
+		$stmt->bindParam(':name', $product->name);
+		$stmt->bindParam(':manuID', $product->manuID);
+		$stmt->bindParam(':quantity', $product->quantity);
+		$stmt->bindParam(':view', $product->view);
+		$stmt->bindParam(':createAt', $product->createAt);
+		$stmt->bindParam(':updateAt', $product->updateAt);
+		$stmt->bindParam(':description', $product->description);
+		$stmt->bindParam(':cateID', $product->cateID);
+		$stmt->bindParam(':price', $product->price);
+		$stmt->bindParam(':image', $product->image);
+		$stmt->bindParam(':productID', $product->productID);
 
 		$stmt->execute();
 	}
@@ -302,5 +304,14 @@ class ProductRepo
 			$data[] = $row;
 		}
 		return $data;
+	}
+
+	public function deleteProductFromDB($proID)
+	{
+		$queryDelProductWithID = "DELETE FROM `product` WHERE `productID` = $proID";
+		$stmt = $this->conn->query($queryDelProductWithID);
+
+		$numRows = $stmt->rowCount();
+		return $numRows > 0 ? true : false;
 	}
 }

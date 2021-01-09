@@ -1,7 +1,7 @@
 <?php
 
-    include_once('../Utils/functions.php');
-    include_once('../DTO/ManuDTO.php');
+    include_once(__DIR__ . '/../Utils/functions.php');
+    include_once(__DIR__ . '/../DTO/ManuDTO.php');
 
     class ManufacturerRepo
     {
