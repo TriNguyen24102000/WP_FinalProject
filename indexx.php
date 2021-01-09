@@ -78,7 +78,7 @@ $newestProducts = $productService->getNewestProducts(10);
           </li>
           <li>
             <div>
-              <form action="Product/View/product.php?page=1" method="post">
+              <form action="Product/Views/product.php?page=1" method="post">
                 <select id="agileinfo-nav_search" name="cate-option" style="width: 200px;" onChange="this.form.submit()">
                   <option selected disabled value="">All categories</option>
                   <?php
@@ -122,7 +122,7 @@ $newestProducts = $productService->getNewestProducts(10);
               <div class="w3l-specilamk">
                 <div class="speioffer-agile">
                   <div class="men-thumb-item">
-                    <a href="./Product/View/productDetail.php?productID=<?php echo $product['productID'] ?>">
+                    <a href="./Product/Views/productDetail.php?productID=<?php echo $product['productID'] ?>">
                       <img src="images/<?php echo $product['image'] ?>" alt="" style="width: 280px; height: 250px">
                       <span class="product-new-top">sold: <?php echo $product['soldQuantity'] ?></span>
                     </a>
@@ -130,7 +130,7 @@ $newestProducts = $productService->getNewestProducts(10);
                 </div>
                 <div class="product-name-w3l">
                   <h4 style="height: 30px; font-size: 15px;">
-                    <a href="./Product/View/productDetail.php?productID=<?php echo $product['productID'] ?>">
+                    <a href="./Product/Views/productDetail.php?productID=<?php echo $product['productID'] ?>">
                       <?php echo $product['name'] ?>
                     </a>
                   </h4>
@@ -178,7 +178,7 @@ $newestProducts = $productService->getNewestProducts(10);
               <div class="w3l-specilamk">
                 <div class="speioffer-agile">
                   <div class="men-thumb-item" style=" position: relative; display: inline-block;">
-                    <a href="./Product/View/productDetail.php?productID=<?php echo $product['productID'] ?>">
+                    <a href="./Product/Views/productDetail.php?productID=<?php echo $product['productID'] ?>">
                       <img src="images/<?php echo $product['image'] ?>" alt="" style="width: 280px; height: 250px">
                       <span style="position: absolute; top: -8px; right: 0;"><?php echo $product['dayCreate'] . '/' . $product['monthCreate'] . '/' . $product['yearCreate'] ?></span>
                     </a>
@@ -186,7 +186,7 @@ $newestProducts = $productService->getNewestProducts(10);
                 </div>
                 <div class="product-name-w3l">
                   <h4 style="height: 33px;">
-                    <a href="./Product/View/productDetail.php?productID=<?php echo $product['productID'] ?>">
+                    <a href="./Product/Views/productDetail.php?productID=<?php echo $product['productID'] ?>">
                       <?php echo $product['name'] ?>
                     </a>
                   </h4>

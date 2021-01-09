@@ -30,7 +30,7 @@ $GLOBALS['id'] = null;
 $orderService = new OrderService(new OrderRepo());
 $orders = $orderService->getAllOrders();
 $index = 1;
-
+include_once(__DIR__ . '/../../headerAdmin.php');
 ?>
 
 
@@ -62,11 +62,11 @@ $index = 1;
 <body>
 
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<div class="content-box-large">
 				<div class="panel-heading">
 					<div class="panel-title">
-						<h2>Order Management</h2>
+						<h2>Orders Management</h2>
 					</div>
 				</div>
 				<div class="panel-body">

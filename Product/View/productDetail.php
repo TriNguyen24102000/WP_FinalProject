@@ -36,7 +36,7 @@ $productService = new ProductService($productRepo);
 $productID = isset($_GET['productID']) ?  $_GET['productID'] : 1;
 $product = $productService->getProductById($productID);
 $product['view']++;
-$productService->updateProduct($product); // update view
+$productService->updateProductV2($product); // update view
 
 // categories
 $categoryService = new CategoryService(new CategoryRepo());

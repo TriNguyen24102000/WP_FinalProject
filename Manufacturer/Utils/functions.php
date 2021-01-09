@@ -1,7 +1,7 @@
 <?php
 
-    function Connect()
-    {
+function ManuConnect()
+{
     $host = 'localhost';
     $dbname = 'ecommerce';
     $username = 'root';
@@ -24,12 +24,12 @@
             echo $ex->getMessage();
         }
     }
-    }
+}
 
-    function getLastManuID()
-    {
-        $sql = "SELECT `manuID` FROM `manufacturer` ORDER BY `manuID` DESC LIMIT 1";
-        $stmt = Connect()->query($sql);
+function getLastManuID()
+{
+    $sql = "SELECT `manuID` FROM `manufacturer` ORDER BY `manuID` DESC LIMIT 1";
+    $stmt = ManuConnect()->query($sql);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC)['manuID'];
-    }
+    return $stmt->fetch(PDO::FETCH_ASSOC)['manuID'];
+}

@@ -1,88 +1,85 @@
 <?php
 
-    include_once(__DIR__ . '/../Utils/functions.php');
-    include_once(__DIR__ . '/../DTO/ManuDTO.php');
+include_once(__DIR__ . '/../Utils/functions.php');
+include_once(__DIR__ . '/../DTO/ManuDTO.php');
 
-    class ManufacturerRepo
-    {
-        public function getAllManus()
-        {
-            $data = array();
-            $sql = "SELECT * FROM `manufacturer`";
-            $stmt = Connect()->query($sql);
+class ManufacturerRepo
+{
+	public function getAllManus()
+	{
+		$data = array();
+		$sql = "SELECT * FROM `manufacturer`";
+		$stmt = ManuConnect()->query($sql);
 
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC))
-            {
-                $data[] = $row;
-            }
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
 
-            return $data;
-        }
+		return $data;
+	}
 
-        public function getManuByID($id)
-        {
-            $sql = "SELECT * FROM `manufacturer` WHERE `manuID` = :manuID";
-            $stmt = Connect()->prepare($sql);
-            $stmt->bindValue(':manuID', $id);
+	public function getManuByID($id)
+	{
+		$sql = "SELECT * FROM `manufacturer` WHERE `manuID` = :manuID";
+		$stmt = ManuConnect()->prepare($sql);
+		$stmt->bindValue(':manuID', $id);
 
-            $stmt->execute();
-            
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        }
+		$stmt->execute();
 
-        public function insertManuToDB(ManuDTO $manuDTO)
-        {
-            $sql = "INSERT INTO `manufacturer`(`manuID`, `name`, `email`, `phone`, `createAt`, `updateAt`) VALUES (:manuID, :name, :email, :phone, :createAt, :updateAt)";
-            $stmt = Connect()->prepare($sql);
+		return $stmt->fetch(PDO::FETCH_ASSOC);
+	}
 
-            $stmt->bindValue(':manuID', $manuDTO->manuID);
-            $stmt->bindValue(':name', $manuDTO->name);
-            $stmt->bindValue(':email', $manuDTO->email);
-            $stmt->bindValue(':phone', $manuDTO->phone);
-            $stmt->bindValue(':createAt', $manuDTO->createAt);
-            $stmt->bindValue(':updateAt', $manuDTO->updateAt);
+	public function insertManuToDB(ManuDTO $manuDTO)
+	{
+		$sql = "INSERT INTO `manufacturer`(`manuID`, `name`, `email`, `phone`, `createAt`, `updateAt`) VALUES (:manuID, :name, :email, :phone, :createAt, :updateAt)";
+		$stmt = ManuConnect()->prepare($sql);
 
-            $stmt->execute();
+		$stmt->bindValue(':manuID', $manuDTO->manuID);
+		$stmt->bindValue(':name', $manuDTO->name);
+		$stmt->bindValue(':email', $manuDTO->email);
+		$stmt->bindValue(':phone', $manuDTO->phone);
+		$stmt->bindValue(':createAt', $manuDTO->createAt);
+		$stmt->bindValue(':updateAt', $manuDTO->updateAt);
 
-            $numRow = $stmt->rowCount();
+		$stmt->execute();
 
-            if($numRow > 0)
-                return true;
-            return false;
-        }
+		$numRow = $stmt->rowCount();
 
-        public function deleteManuFromDB($manuID)
-        {
-            $queryDelProductContainManu = "DELETE FROM `product` WHERE `manuID` = $manuID";
-            $queryDelManu = "DELETE FROM `manufacturer` WHERE `manuID` = $manuID";
-            
-            $stmt_1 = Connect()->query($queryDelProductContainManu);
-            $stmt_2 = Connect()->query($queryDelManu);
-            
-            $numRow = $stmt_2->rowCount();
+		if ($numRow > 0)
+			return true;
+		return false;
+	}
 
-            return $numRow > 0 ? true : false;
-        }
+	public function deleteManuFromDB($manuID)
+	{
+		$queryDelProductContainManu = "DELETE FROM `product` WHERE `manuID` = $manuID";
+		$queryDelManu = "DELETE FROM `manufacturer` WHERE `manuID` = $manuID";
 
-        public function updateManuToDB(ManuDTO $manuDTO)
-        {
+		$stmt_1 = ManuConnect()->query($queryDelProductContainManu);
+		$stmt_2 = ManuConnect()->query($queryDelManu);
 
-            $sql = "UPDATE `manufacturer` SET `name`= :name, `email`= :email, `phone` = :phone, `createAt`= :createAt, `updateAt` = :updateAt WHERE `manuID` = :manuID";                        
-            $stmt = Connect()->prepare($sql);
+		$numRow = $stmt_2->rowCount();
 
-            $stmt->bindValue(':manuID', $manuDTO->manuID);
-            $stmt->bindValue(':name', $manuDTO->name);
-            $stmt->bindValue(':email', $manuDTO->email);
-            $stmt->bindValue(':phone', $manuDTO->phone);
-            $stmt->bindValue(':createAt', $manuDTO->createAt);
-            $stmt->bindValue(':updateAt', $manuDTO->updateAt);
+		return $numRow > 0 ? true : false;
+	}
 
-            $stmt->execute();
+	public function updateManuToDB(ManuDTO $manuDTO)
+	{
 
-            $numRow = $stmt->rowCount();
+		$sql = "UPDATE `manufacturer` SET `name`= :name, `email`= :email, `phone` = :phone, `createAt`= :createAt, `updateAt` = :updateAt WHERE `manuID` = :manuID";
+		$stmt = ManuConnect()->prepare($sql);
 
-            return $numRow > 0 ? true : false;
-        }
-    }
+		$stmt->bindValue(':manuID', $manuDTO->manuID);
+		$stmt->bindValue(':name', $manuDTO->name);
+		$stmt->bindValue(':email', $manuDTO->email);
+		$stmt->bindValue(':phone', $manuDTO->phone);
+		$stmt->bindValue(':createAt', $manuDTO->createAt);
+		$stmt->bindValue(':updateAt', $manuDTO->updateAt);
 
-?>
+		$stmt->execute();
+
+		$numRow = $stmt->rowCount();
+
+		return $numRow > 0 ? true : false;
+	}
+}

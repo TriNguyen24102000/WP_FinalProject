@@ -314,4 +314,37 @@ class ProductRepo
 		$numRows = $stmt->rowCount();
 		return $numRows > 0 ? true : false;
 	}
+
+	// update product
+	public function updateProductV2($product)
+	{
+		$sql = ("UPDATE `product`
+				SET
+					`name` = :name,
+					`manuID` = :manuID,
+					`quantity` = :quantity,
+					`view` = :view,
+					`createAt` = :createAt,
+					`updateAt` = :updateAt, 
+					`description` = :description,
+					`cateID` = :cateID,
+					`price` = :price,
+					`image` = :image
+				WHERE `productID` = :productID");
+
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bindParam(':name', $product['name'], PDO::PARAM_STR);
+		$stmt->bindParam(':manuID', $product['manuID']);
+		$stmt->bindParam(':quantity', $product['quantity']);
+		$stmt->bindParam(':view', $product['view']);
+		$stmt->bindParam(':createAt', $product['createAt']);
+		$stmt->bindParam(':updateAt', $product['updateAt']);
+		$stmt->bindParam(':description', $product['description']);
+		$stmt->bindParam(':cateID', $product['cateID']);
+		$stmt->bindParam(':price', $product['price']);
+		$stmt->bindParam(':image', $product['image']);
+		$stmt->bindParam(':productID', $product['productID'], PDO::PARAM_INT);
+
+		$stmt->execute();
+	}
 }

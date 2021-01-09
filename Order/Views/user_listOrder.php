@@ -32,7 +32,7 @@ if (isset($_SESSION['unpaidItems'])) {
 
 	// check out
 	if (isset($_GET['act'])) {
-		if ($userID === '-1') {
+		if ($userID == '-1') {
 			echo '<script> alert("Please login before make a payment"); </script>';
 		} else {
 			if (count($orderItems) > 1) {
@@ -72,7 +72,7 @@ if (isset($_SESSION['unpaidItems'])) {
 							);
 							$totalPrice += $quantity * $product['price'];
 							$product['quantity'] -= $quantity;
-							$productService->updateProduct($product);
+							$productService->updateProductV2($product);
 						}
 						//update totalPrice
 						$orderService->updateOrderTotalPrice($lastOrderID, $totalPrice);
@@ -89,7 +89,6 @@ if (isset($_SESSION['unpaidItems'])) {
 	$categoryService = new CategoryService(new CategoryRepo());
 	$categories = $categoryService->getAllCategories();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -124,25 +123,33 @@ if (isset($_SESSION['unpaidItems'])) {
 				<!-- header lists -->
 				<ul>
 					<li><span class="fa fa-phone" aria-hidden="true"></span>028 3915 5812</li>
-					<li>
-						<?php
-						if ($userID == '-1') {
-						?>
+					<?php
+					if ($userID == '-1') {
+					?>
+						<li>
+
 							<a href="../../User/Views/login.php">
 								<span class="fas fa-user-circle" aria-hidden="true"></span> Sign In
 							</a>
-						<?php
-						} else {
-							$userService = new UserService(new UserRepo());
-							$user = $userService->getUserByID($userID);
-						?>
+						</li>
+					<?php
+					} else {
+						$userService = new UserService(new UserRepo());
+						$user = $userService->getUserByID($userID);
+					?>
+						<li>
 							<a href="../../User/Views/userDetail.php">
 								<span class="fa fa-user-o" aria-hidden="true"></span> <?php echo $user['username'] ?>
 							</a>
-						<?php
-						}
-						?>
-					</li>
+						</li>
+						<li>
+							<a href="../../User/Views/logout.php">
+								<span class="fa fa-power-off" aria-hidden="true"></span>Logout
+							</a>
+						</li>
+					<?php
+					}
+					?>
 					<li>
 						<a href="../../User/Views/signup.php">
 							<span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up
@@ -221,7 +228,7 @@ if (isset($_SESSION['unpaidItems'])) {
 									<tr class="rem<?php echo $idx ?>">
 										<td class="invert"><?php echo $idx ?></td>
 										<td class="invert-image">
-											<a href="../../Product/View/productDetail.php?productID=<?php echo $productID ?>">
+											<a href="../../Product/Views/productDetail.php?productID=<?php echo $productID ?>">
 												<img src="../../images/<?php echo $product['image'] ?>" alt=" " style="width: 50px; height:50px;" class="img-responsive">
 											</a>
 										</td>
@@ -320,7 +327,7 @@ if (isset($_SESSION['unpaidItems'])) {
 							<?php
 							foreach ($categories as $category) {
 								echo ('<li>
-                    <a href="../../Product/View/product.php?page=1&cateID='
+                    <a href="../../Product/Views/product.php?page=1&cateID='
 									. $category['cateID']
 									. '">'
 									. $category['name']

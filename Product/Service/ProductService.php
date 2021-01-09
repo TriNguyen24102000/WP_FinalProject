@@ -1,7 +1,7 @@
 <?php
 
 include_once(__DIR__ . '/../Repository/ProductRepo.php');
-
+include_once(__DIR__ . '/../DTO/ProductDTO.php');
 
 class ProductService
 {
@@ -67,7 +67,7 @@ class ProductService
 		return $this->productRepo->getPagingProducts($limit, $cateID, $manuID, $orderBy, $itemsPerPage);
 	}
 
-	public function updateProduct($product)
+	public function updateProduct(ProductDTO $product)
 	{
 		return $this->productRepo->updateProduct($product);
 	}
@@ -100,5 +100,10 @@ class ProductService
 	public function deleteProduct($proID)
 	{
 		return $this->productRepo->deleteProductFromDB($proID);
+	}
+
+	public function updateProductV2($product)
+	{
+		return $this->productRepo->updateProductV2($product);
 	}
 }

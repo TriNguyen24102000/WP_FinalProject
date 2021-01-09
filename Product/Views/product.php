@@ -24,7 +24,7 @@ if (!isset($_SESSION['unpaidItems'])) {
 $userID = isset($_SESSION['uid']) ? $_SESSION['uid'] : '-1';
 
 // number of product in cart
-$cartCount = isset($_SESSION['unpaidItems']) ? count($_SESSION['unpaidItems']) - 1 : 0;
+$cartCount = isset($_SESSION['unpaidItems']) ? $_SESSION['unpaidItems']['count'] : 0;
 ?>
 
 <?php
@@ -134,25 +134,32 @@ $products = $productService->getPagingProducts($limit, $cateID, $manuID, $filter
 				<!-- header lists -->
 				<ul>
 					<li><span class="fa fa-phone" aria-hidden="true"></span>028 3915 5812</li>
-					<li>
-						<?php
-						if ($userID == '-1') {
-						?>
+					<?php
+					if ($userID == '-1') {
+					?>
+						<li>
 							<a href="../../User/Views/login.php">
 								<span class="fas fa-user-circle" aria-hidden="true"></span> Sign In
 							</a>
-						<?php
-						} else {
-							$userService = new UserService(new UserRepo());
-							$user = $userService->getUserByID($userID);
-						?>
+						</li>
+					<?php
+					} else {
+						$userService = new UserService(new UserRepo());
+						$user = $userService->getUserByID($userID);
+					?>
+						<li>
 							<a href="../../User/Views/userDetail.php">
 								<span class="fa fa-user-o" aria-hidden="true"></span> <?php echo $user['username'] ?>
 							</a>
-						<?php
-						}
-						?>
-					</li>
+						</li>
+						<li>
+							<a href="../../User/Views/logout.php">
+								<span class="fa fa-power-off" aria-hidden="true"></span>Logout
+							</a>
+						</li>
+					<?php
+					}
+					?>
 					<li>
 						<a href="../../User/Views/signup.php">
 							<span class="fa fa-pencil-square-o" aria-hidden="true"></span> Sign Up
