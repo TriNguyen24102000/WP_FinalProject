@@ -1,112 +1,113 @@
 <?php
 
-    include_once('../Service/UserService.php');
+include_once(__DIR__ . '/../Service/UserService.php');
 
-    function Connect()
-    {
-        $host = 'localhost';
-        $dbname = 'ecommerce';
-        $username = 'root';
-        $password = '';
+function Connect()
+{
+    $host = 'localhost';
+    $dbname = 'ecommerce';
+    $username = 'root';
+    $password = '';
 
-        try
-        {
+    try {
+        $dsn = 'mysql:host=' . $host . ';dbname=' . $dbname;
+        $pdo = new PDO($dsn, $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    } catch (Exception $ex) {
+        try {
             $dsn = 'mysql:host=' . $host . ';dbname=' . $dbname;
-            $pdo = new PDO($dsn, $username, $password);
+            $pdo = new PDO($dsn, $username, 'trung1234');
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             return $pdo;
-        }
-        catch(Exception $ex)
-        {
+        } catch (Exception $ex) {
             echo $ex->getMessage();
         }
     }
+}
 
-   //get user permission
-   function getPermission($username, $pwd)
-   {
-       //declaration
-       $datas = array();
+//get user permission
+function getPermission($username, $pwd)
+{
+    //declaration
+    $datas = array();
 
-       $sql = "SELECT * from permission JOIN user ON permission.permissionID = user.roleID WHERE user.username = :uname AND user.password = :pwd";
-       $stmt = Connect()->prepare($sql);
-       
-       //Binding value to parameter
-       $stmt->bindValue(':uname', $username);
-       $stmt->bindValue(':pwd', $pwd);
+    $sql = "SELECT * from permission JOIN user ON permission.permissionID = user.roleID WHERE user.username = :uname AND user.password = :pwd";
+    $stmt = Connect()->prepare($sql);
 
-       $stmt->execute();
+    //Binding value to parameter
+    $stmt->bindValue(':uname', $username);
+    $stmt->bindValue(':pwd', $pwd);
 
-       return $stmt->fetch(PDO::FETCH_ASSOC); 
-   }
+    $stmt->execute();
 
-   //Check if account exists
-   function confirmAccount($username, $password)
-   {
-       $sql = "SELECT * FROM user WHERE username = :uname AND user.password = :pwd";
-       $stmt = Connect()->prepare($sql);
-       
-       //binding parameter
-       $stmt->bindValue(':uname', $username);
-       $stmt->bindValue(':pwd', $password);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
-       //execute query
-       $stmt->execute();
+//Check if account exists
+function confirmAccount($username, $password)
+{
+    $sql = "SELECT * FROM user WHERE username = :uname AND user.password = :pwd";
+    $stmt = Connect()->prepare($sql);
 
-       $numRow = $stmt->rowCount();
+    //binding parameter
+    $stmt->bindValue(':uname', $username);
+    $stmt->bindValue(':pwd', $password);
 
-       if($numRow > 0)
-           return true;
-       return false;
-   }
+    //execute query
+    $stmt->execute();
 
-   function comparePassword($srcPass, $desPass)
-   {
-       return $srcPass == $desPass;
-   }
+    $numRow = $stmt->rowCount();
 
-   function isCorrectSignupFormat($username, $pwd, $name, $email, $address, $dob, $phone)
-   {
-        if(isset($username) && isset($pwd) && isset($name) && isset($email) && isset($address) && isset($dob)
-                           && isset($phone))
-            return true;
-        return false;
-   }
+    if ($numRow > 0)
+        return true;
+    return false;
+}
 
-   function isEqualsPassword($password, $confirmPassword)
-   {
-       return $password == $confirmPassword;
-   }
+function comparePassword($srcPass, $desPass)
+{
+    return $srcPass == $desPass;
+}
 
-   function getLastUserID()
-   {
-       $sql = "SELECT `userID` FROM `user` ORDER BY `userID` DESC LIMIT 1";
-       $stmt = Connect()->query($sql);
+function isCorrectSignupFormat($username, $pwd, $name, $email, $address, $dob, $phone)
+{
+    if (
+        isset($username) && isset($pwd) && isset($name) && isset($email) && isset($address) && isset($dob)
+        && isset($phone)
+    )
+        return true;
+    return false;
+}
 
-       return $stmt->fetch(PDO::FETCH_ASSOC);
-   }
+function isEqualsPassword($password, $confirmPassword)
+{
+    return $password == $confirmPassword;
+}
 
-   function dropFK()
-   {
-       $sql = "ALTER TABLE `user` DROP FOREIGN KEY `fk_user_permission`;";
-       $stmt = Connect()->query($sql);
-   }
+function getLastUserID()
+{
+    $sql = "SELECT `userID` FROM `user` ORDER BY `userID` DESC LIMIT 1";
+    $stmt = Connect()->query($sql);
 
-   function isEmpty($str)
-   {
-       return strlen($str) == 0;
-   }
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
-   function getIDByUserName($array, $username)
-   {
-       foreach($array as $data)
-       {
-           if($data['username'] == $username)
-           {
-               return $data['userID'];
-           }
-       }
-   }
+function dropFK()
+{
+    $sql = "ALTER TABLE `user` DROP FOREIGN KEY `fk_user_permission`;";
+    $stmt = Connect()->query($sql);
+}
 
-?>
+function isEmpty($str)
+{
+    return strlen($str) == 0;
+}
+
+function getIDByUserName($array, $username)
+{
+    foreach ($array as $data) {
+        if ($data['username'] == $username) {
+            return $data['userID'];
+        }
+    }
+}

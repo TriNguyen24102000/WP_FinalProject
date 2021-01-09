@@ -10,6 +10,11 @@ if (session_status() == PHP_SESSION_NONE) {
 	session_start();
 }
 
+// ordered
+if (isset($_GET['alert'])) {
+	echo '<script> alert("Ordered!"); </script>';
+}
+
 // unpaidItems
 $orderItems = null;
 if (isset($_SESSION['unpaidItems'])) {
@@ -30,36 +35,52 @@ if (isset($_SESSION['unpaidItems'])) {
 		if ($userID === '-1') {
 			echo '<script> alert("Please login before make a payment"); </script>';
 		} else {
-			if (count($orderItems) > 0) {
+			if (count($orderItems) > 1) {
 				$orderService = new OrderService(new OrderRepo());
 				// insert order with totalPrice = 0
 				$orderService->insertOrder($userID, $total = 0);
 				// get last inserted order
 				$lastOrderID = $orderService->getLastOrder()['orderID'];
 				// insert order_detail
+				// check enough quantity
+				$enough = true;
 				if ($orderItems != null) {
-					$totalPrice = 0;
 					foreach ($orderItems as $productID => $quantity) {
 						if ($productID == 'count') {
 							continue;
 						}
-						$pricePerItem = $productService->getProductById($productID)['price'];
-						$purPrice = $orderService->insertOrderDetail(
-							$lastOrderID,
-							$productID,
-							$quantity,
-							($quantity * $pricePerItem)
-						);
-						$totalPrice += $quantity * $pricePerItem;
+						$product = $productService->getProductById($productID);
+						if ($quantity > $product['quantity']) {
+							$enough = false;
+							echo '<script> alert("' . $product['name'] . ' only has ' . $product['quantity'] . ' left! Were sorry"); </script>';
+							break;
+						}
 					}
-					//update totalPrice
-					$orderService->updateOrderTotalPrice($lastOrderID, $totalPrice);
-					// reset cart
-					$_SESSION['unpaidItems'] = array();
-					$_SESSION['unpaidItems']['count'] = 0;
-					// alert
-					echo '<script> alert("Ordered!"); </script>';
-					header('location: user_listOrder.php');
+					// insert
+					if ($enough == true) {
+						$totalPrice = 0;
+						foreach ($orderItems as $productID => $quantity) {
+							if ($productID == 'count') {
+								continue;
+							}
+							$product = $productService->getProductById($productID);
+							$purPrice = $orderService->insertOrderDetail(
+								$lastOrderID,
+								$productID,
+								$quantity,
+								($quantity * $product['price'])
+							);
+							$totalPrice += $quantity * $product['price'];
+							$product['quantity'] -= $quantity;
+							$productService->updateProduct($product);
+						}
+						//update totalPrice
+						$orderService->updateOrderTotalPrice($lastOrderID, $totalPrice);
+						// reset cart
+						$_SESSION['unpaidItems'] = array();
+						$_SESSION['unpaidItems']['count'] = 0;
+						header('location: user_listOrder.php?alert=1');
+					}
 				}
 			}
 		}
