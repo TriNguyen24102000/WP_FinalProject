@@ -68,7 +68,7 @@ include_once(__DIR__ . '/../../headerAdmin.php');
                   <td><?php echo $category['updateAt']; ?></td>
 
                   <td><a href="action.php?action=deleteCate&cateID=<?php echo $category['cateID']; ?>"><img style="width: 0.5cm; height: 0.5cm" src="Images/trash.png" alt="Delete"></a></td>
-                  <td><a href="action.php?action=updateCate&CateID=<?php echo $category['cateID']; ?>"><img style="width: 0.5cm; height: 0.5cm" src="Images/edit.png" alt="Update"></a></td>
+                  <td><a href="action.php?action=updateCate&cateID=<?php echo $category['cateID']; ?>"><img style="width: 0.5cm; height: 0.5cm" src="Images/edit.png" alt="Update"></a></td>
                 </tr>
               <?php endforeach; ?>
               </tr>

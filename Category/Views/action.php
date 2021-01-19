@@ -2,9 +2,9 @@
 
 include_once(__DIR__ . '/../Service/CategoryService.php');
 
-$manuService = new CategoryService(new CategoryRepo());
+$cateService = new CategoryService(new CategoryRepo());
 $action = $_GET['action'];
-$manuID = $_GET['cateID'];
+$cateID = $_GET['cateID'];
 
 if (isset($_GET['action'])) {
   if ($_GET['action'] == "addCate") {
@@ -13,14 +13,14 @@ if (isset($_GET['action'])) {
   }
 
   if ($_GET['action'] == "deleteCate") {
-    $manuService->deleteCategory($manuID);
+    $cateService->deleteCategory($cateID);
 
     header('location: admin_category.php?deleteStatus=success');
     exit();
   }
 
-  if ($_GET['action'] == "updateManu") {
-    header("location: updateCate.php?cateID=$manuID");
+  if ($_GET['action'] == "updateCate") {
+    header("location: updateCate.php?cateID=$cateID");
     exit();
   }
 }

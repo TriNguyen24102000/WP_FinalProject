@@ -19,6 +19,7 @@ if (isset($_GET['alert'])) {
 $orderItems = null;
 if (isset($_SESSION['unpaidItems'])) {
 	if (isset($_POST['delProductID'])) {
+		$_SESSION['unpaidItems']['count'] -= $_SESSION['unpaidItems'][$_POST['delProductID']];
 		unset($_SESSION['unpaidItems'][$_POST['delProductID']]);
 	}
 	// set unpaindItems
@@ -442,7 +443,8 @@ if (isset($_SESSION['unpaidItems'])) {
 				url: 'updateUnpaidItems.php',
 				data: {
 					productID: productID,
-					quantity: quantity
+					quantity: quantity,
+					act: 'plus'
 				}
 			}).done(function(data) {
 				console.log("result: " + data);
@@ -476,7 +478,8 @@ if (isset($_SESSION['unpaidItems'])) {
 					url: 'updateUnpaidItems.php',
 					data: {
 						productID: productID,
-						quantity: quantity
+						quantity: quantity,
+						act: 'minus'
 					}
 				}).done(function(data) {
 					console.log("result: " + data);

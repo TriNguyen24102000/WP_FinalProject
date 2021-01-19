@@ -71,12 +71,11 @@ class OrderRepo
 
 	public function deleteOrderFromDB($id)
 	{
-		$sql = "DELETE `order` WHERE orderID = :orderID";
+		$sql1 = "DELETE FROM `order_detail` WHERE orderID = $id";
+		$sql2 = "DELETE FROM `order` WHERE orderID = $id";
 
-		$stmt = $this->conn->prepare($sql);
-		$stmt->bindValue('order', $id);
-
-		$stmt->execute();
+		$stmt = $this->conn->query($sql1);
+		$stmt = $this->conn->query($sql2);
 
 		$numRow = $stmt->rowCount();
 
@@ -86,19 +85,17 @@ class OrderRepo
 	public function updateOrder(OrderDTO $orderDTO)
 	{
 
-		$sql = "UPDATE `order` SET userID = :userID,
-                                       totalPrice = :totalPrice,
-                                       createAt = :createAt,
-                                       updateAt = :updateAt";
-
+		$sql = "UPDATE `order` 
+						SET
+								totalPrice = :totalPrice,
+								updateAt = :updateAt
+						WHERE orderID = :orderID";
 		$stmt = $this->conn->prepare($sql);
-		$stmt->bindValue(':userID', $orderDTO->userID);
 		$stmt->bindValue(':totalPrice', $orderDTO->totalPrice);
-		$stmt->bindValue(':createAt', $orderDTO->createAt);
 		$stmt->bindValue(':updateAt', $orderDTO->updateAt);
-
+		$stmt->bindValue(':orderID', $orderDTO->orderID);
+		$stmt->execute();
 		$numRow = $stmt->rowCount();
-
 		return $numRow > 0 ? true : false;
 	}
 

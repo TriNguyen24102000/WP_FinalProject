@@ -8,16 +8,16 @@ $cateService = new CategoryService(new CategoryRepo());
 //get input and edited data
 $name = $_POST['name'];
 $cateID = $_POST['cateID'];
+$updateTime = date("Y-m-d H:i:s");
 
 if (isset($name)) {
   try {
-    $updateTime = date("Y-m-d H:i:s");
     $cateService->updateCategory($cateID, $name, $updateTime);
     header('location: admin_category.php?updateStatus=success');
     exit();
   } catch (Exception $ex) {
-    echo '<script> alert("' . $ex . '"); </script>';
-    header('location: updateCat.php?cateID=' . $cateID);
+    echo '<script> alert("Update Failed"); </script>';
+    header('location: updateCate.php?cateID=' . $cateID);
     exit();
   }
 }

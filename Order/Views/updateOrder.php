@@ -44,25 +44,6 @@ $users = $userService->getAllUsers();
         <label>Total ($): </label>
         <input type="number" name="totalPrice" value="<?php echo $order['totalPrice']; ?>">
       </div>
-
-      <div>
-        <label>Username: </label>
-        <select name="userID">
-          <?php
-          foreach ($users as $user) {
-            if ($user['userID'] == $currentUser['userID']) { ?>
-              <option selected value="<?php echo $user['userID']; ?>">
-                <?php echo $user['username']; ?>
-              </option>
-            <?php
-            } else { ?>
-              <option value="<?php echo $$user['userID']; ?>">
-                <?php echo $user['username']; ?>
-              </option>
-          <?php }
-          } ?>
-        </select>
-      </div>
       <br><br>
       <button type="submit" style="margin-top:5px">Update</button>
     </form>

@@ -44,26 +44,56 @@ class CategoryRepo
 	// update category
 	public function updateCategory($cateID, $name, $updateAt)
 	{
-		$sql = ("UPDATE `category` 
-						SET 
-						`name` = :name,
-						`updateAt` = $updateAt
-						WHERE `cateID` = $cateID");
-
+		$sql = "UPDATE `category` 
+						SET
+								`name` = :name,
+								`updateAt` = :updateAt
+						WHERE cateID = :cateID";
 		$stmt = $this->conn->prepare($sql);
-		$stmt->bindParam(':name', $name, PDO::PARAM_STR);
+		$stmt->bindValue(':name', $name);
+		$stmt->bindValue(':updateAt', $updateAt);
+		$stmt->bindValue(':cateID', $cateID);
 		$stmt->execute();
+		$numRow = $stmt->rowCount();
+		return $numRow > 0 ? true : false;
 	}
 
 	// delete category
 	public function deleteCategory($cateID)
 	{
-		$sql = "DELETE `category` WHERE `cateID` = $cateID";
-		$sql = "DELETE `category` WHERE `cateID` = $cateID";
-		$sql = "DELETE `category` WHERE `cateID` = $cateID";
-		$sql = "DELETE `category` WHERE `cateID` = $cateID";
-		$stmt = $this->conn->prepare($sql);
-		$stmt->execute();
+		$sql1 = "SELECT productID FROM `product` WHERE cateID = $cateID";
+		$delProds = $this->conn->query($sql1);
+		$data = array();
+		while ($row = $delProds->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $row;
+		}
+
+		try {
+
+			foreach ($data as $productID) {
+				$this->conn->query("DELETE FROM `order_detail` WHERE productID = $productID");
+			}
+		} catch (\Throwable $th) {
+			//throw $th;
+		}
+
+
+
+		$queryDelProductContainCate = "DELETE FROM `product` WHERE `cateID` = $cateID";
+		$queryDelCate = "DELETE FROM `category` WHERE `cateID` = $cateID";
+
+		//perform
+
+		try {
+			$this->conn->query($queryDelProductContainCate);
+		} catch (\Throwable $th) {
+			//throw $th;
+		}
+		$stmt_3 = $this->conn->query($queryDelCate);
+
+		$numRow = $stmt_3->rowCount();
+
+		return $numRow > 0 ? true : false;
 	}
 
 	// get categories by name

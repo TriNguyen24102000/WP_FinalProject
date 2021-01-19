@@ -5,9 +5,9 @@ include(__DIR__ . '/../DTO/OrderDTO.php');
 
 $order = new OrderDTO(
   $_POST['orderID'],
-  $_POST['userID'],
+  'NULL',
   $_POST['totalPrice'],
-  $_POST['createAt'],
+  'NULL',
   date("Y-m-d H:i:s")
 );
 
@@ -24,6 +24,6 @@ try {
 } catch (Exception $ex) {
   throw $ex;
   echo '<script> alert("' . $ex . '"); </script>';
-  header('location: updateORder.php?orderID=' . $order->orderID);
+  header('location: updateOrder.php?orderID=' . $order->orderID);
   exit();
 }
