@@ -3,6 +3,7 @@
     class UserDTO
     {
         public $userID;
+        public $avatar;
         public $userName;
         public $password;
         public $name;

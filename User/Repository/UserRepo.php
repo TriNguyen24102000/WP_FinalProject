@@ -92,5 +92,6 @@ class UserRepo
 		$numRow = $stmt->rowCount();
 
 		return $numRow > 0 ? true : false;
+		
 	}
 }

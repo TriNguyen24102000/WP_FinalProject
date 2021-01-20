@@ -45,7 +45,7 @@ function getPermission($username, $pwd)
 }
 
 //Check if account exists
-function confirmAccount($username, $password)
+function validateAccount($username, $password)
 {
     $sql = "SELECT * FROM user WHERE username = :uname AND user.password = :pwd";
     $stmt = Connect()->prepare($sql);

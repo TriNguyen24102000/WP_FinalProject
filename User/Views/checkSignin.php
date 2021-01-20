@@ -8,14 +8,13 @@ $users = $userService->getAllUsers();
 try {
 	$userName = $_POST['userName'];
 	$pwd = $_POST['password'];
-	$userMatch = null;
 
 	if (isEmpty($userName) || isEmpty($pwd)) {
 		header('location: login.php?error=emptyField');
 		exit();
 	} else {
 		$hashPwd = md5($pwd);
-		if (confirmAccount($userName, $hashPwd) == false) {
+		if (validateAccount($userName, $hashPwd) == false) {
 			header('location: login.php?error=wrongLogin');
 			exit();
 		} else {
@@ -33,6 +32,7 @@ try {
 			} else
 				//nav to product
 				header('location: ../../indexx.php');
+				exit();
 		}
 	}
 } catch (Exception $ex) {

@@ -1,54 +1,53 @@
 body {
-    font-family: 'Open Sans', sans-serif;
-    background-color: #f7f7f7;
-    position: relative;
-    margin: 0px;
-    font-size: 12px;
-    padding: 0px;
-  }
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f7f7f7;
+  position: relative;
+  margin: 0px;
+  font-size: 12px;
+  padding: 0px;
+}
 
-  td
+td
 {
-    padding:0 15px;
+  padding:0 15px;
 }
 
 .icon-util
-   {
-     width: 0.5cm;
-     height: 0.5cm;
-   }
+ {
+   width: 0.5cm;
+   height: 0.5cm;
+ }
 
-   h2
-   {
-       text-align: center;
-   }
+ h2
+ {
+     text-align: center;
+ }
 
-   .input-delete
-   {
-       background: url(Images/trash.png) no-repeat scroll 7px 7px;
-       padding-left: 30px;
-   }
+ .input-delete
+ {
+     background: url(Images/trash.png) no-repeat scroll 7px 7px;
+     padding-left: 30px;
+ }
 
-   .input-edit
-   {
-       background: url(Images/edit.png) no-repeat scroll 7px 7px;
-       padding-left: 30px;
-   }
-  
-  /* Sidebar navigation */
-  
-  .content-box, .content-box-large {
-     margin-bottom:30px;
-     background:#fff;
-     border-radius:10px;
-     padding:10px;
-     border-left:1px solid #eee;
-     border-top:1px solid #eee;
-     border-right:2px solid #eee;
-     border-bottom:2px solid #eee; 
-  }
-  
-  .content-box-large {
-    padding: 20px;
-  }
-  
+ .input-edit
+ {
+     background: url(Images/edit.png) no-repeat scroll 7px 7px;
+     padding-left: 30px;
+ }
+
+/* Sidebar navigation */
+
+.content-box, .content-box-large {
+   margin-bottom:30px;
+   background:#fff;
+   border-radius:10px;
+   padding:10px;
+   border-left:1px solid #eee;
+   border-top:1px solid #eee;
+   border-right:2px solid #eee;
+   border-bottom:2px solid #eee; 
+}
+
+.content-box-large {
+  padding: 20px;
+}
